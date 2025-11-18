@@ -1,0 +1,95 @@
+.admin-announcements-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  .announcements-container {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-start;
+
+    mat-form-field {
+      flex: 1 1 220px;
+    }
+
+    .reset-button {
+      height: 64px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 24px;
+    }
+  }
+
+  table {
+    border-radius: 16px;
+    overflow: hidden;
+
+    th {
+      background: #f5f7fb;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.75rem;
+    }
+
+    td,
+    th {
+      padding: 1rem;
+      font-family: 'Poppins', sans-serif;
+    }
+  }
+
+  .status-chip {
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+
+    &.pending {
+      background: rgba(255, 193, 7, 0.18);
+      color: #a06a00;
+    }
+
+    &.review {
+      background: rgba(63, 81, 181, 0.18);
+      color: #2a3eb1;
+    }
+
+    &.accepted {
+      background: rgba(76, 175, 80, 0.2);
+      color: #1b5e20;
+    }
+  }
+
+  .actions {
+    min-width: 220px;
+    text-align: center;
+
+    button {
+      margin-left: 0.5rem;
+    }
+  }
+
+  .primary-cell {
+    font-weight: 600;
+    color: #1f2a37;
+    font-size: 0.95rem;
+  }
+}

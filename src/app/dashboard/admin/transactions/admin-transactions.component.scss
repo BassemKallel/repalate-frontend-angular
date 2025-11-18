@@ -1,0 +1,62 @@
+.admin-transactions-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .transactions-container {
+    padding: 1.5rem;
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background: #ffffff;
+    border: 1px solid #e7ecf5;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-start;
+
+    mat-form-field {
+      flex: 1 1 220px;
+    }
+
+    .reset-button {
+      height: 64px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 24px;
+    }
+  }
+
+  table {
+    border-radius: 16px;
+    overflow: hidden;
+
+    th {
+      background: #f5f7fb;
+      font-weight: 600;
+    }
+  }
+
+  .status-chip {
+    padding: 0.2rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    &.en { background: rgba(255, 193, 7, 0.2); }
+    &.terminée { background: rgba(76, 175, 80, 0.2); }
+    &.annulée { background: rgba(244, 67, 54, 0.2); }
+  }
+}

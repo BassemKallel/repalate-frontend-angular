@@ -1,0 +1,32 @@
+<section class="settings">
+  <div class="section-header">
+    <div>
+      <h2>Account Settings</h2>
+      <p>Update your contact information</p>
+    </div>
+  </div>
+
+  <mat-card>
+    <form [formGroup]="profileForm" (ngSubmit)="save()">
+      <mat-form-field appearance="fill">
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Phone</mat-label>
+        <input matInput formControlName="tel" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Location</mat-label>
+        <input matInput formControlName="localisation" />
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" [disabled]="loading">
+        <mat-progress-spinner *ngIf="loading" mode="indeterminate" diameter="20"></mat-progress-spinner>
+        <span *ngIf="!loading">Save changes</span>
+      </button>
+    </form>
+  </mat-card>
+</section>

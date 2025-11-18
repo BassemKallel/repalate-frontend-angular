@@ -1,0 +1,89 @@
+:host {
+  display: block;
+}
+
+.sidebar {
+  width: 260px;
+  background: #fff;
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+  min-height: 100vh;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  &.collapsed {
+    width: 88px;
+
+    nav a span,
+    .footer span,
+    .brand .title {
+      display: none;
+    }
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  .logo-dot {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    background: #ffc107;
+  }
+
+  .title {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    strong {
+      font-size: 1.25rem;
+    }
+    small {
+      color: #7a7a7a;
+    }
+  }
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 1rem;
+    border-radius: 16px;
+    text-decoration: none;
+    color: #5a5a5a;
+    transition: background 0.2s ease;
+
+    &.active {
+      background: rgba(255, 193, 7, 0.18);
+      color: #111;
+      font-weight: 600;
+    }
+
+    &:hover {
+      background: rgba(33, 150, 243, 0.12);
+    }
+  }
+}
+
+.footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  button {
+    border-radius: 14px;
+    justify-content: flex-start;
+  }
+}
+

@@ -1,0 +1,44 @@
+.admin-signals-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .signal-card {
+    border-radius: 18px;
+  }
+
+  .status-chip {
+    padding: 0.2rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+
+    &.ouvert {
+      background: rgba(255, 152, 0, 0.15);
+      color: #c27600;
+    }
+
+    &.en {
+      background: rgba(63, 81, 181, 0.15);
+      color: #283593;
+    }
+
+    &.résolu,
+    &.resolu {
+      background: rgba(76, 175, 80, 0.15);
+      color: #1b5e20;
+    }
+  }
+
+  .spacer {
+    flex: 1;
+  }
+}

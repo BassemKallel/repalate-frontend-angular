@@ -1,0 +1,77 @@
+<ng-container *ngIf="!loading && announcement; else loadingTpl">
+  <section class="details">
+    <div class="section-header">
+      <div>
+        <h2>Announcement Details</h2>
+        <p>View all the information about this donation, including food details and related offers.</p>
+      </div>
+      <div class="head-actions">
+        <button mat-stroked-button color="warn" (click)="delete()">
+          <mat-icon>delete</mat-icon>
+          Delete
+        </button>
+        <button mat-raised-button color="primary" (click)="edit()">
+          <mat-icon>edit</mat-icon>
+          Edit
+        </button>
+      </div>
+    </div>
+
+    <mat-card class="summary-card">
+      <div class="summary">
+        <img [src]="announcement.imageUrl || 'https://placehold.co/160x160'" alt="{{ announcement.title }}" />
+        <div class="summary-info">
+          <span class="id">ID {{ announcement.id }}</span>
+          <h3>{{ announcement.title }}</h3>
+          <p>{{ announcement.category }} • {{ announcement.type }} • {{ announcement.quantity }} {{ announcement.unit }}</p>
+          <p>Expires on <strong>{{ announcement.expirationDate | date: 'dd-MM-yyyy' }}</strong></p>
+          <div class="contact">
+            <div>
+              <small>Pickup Location</small>
+              <p>{{ announcement.pickupAddress }}</p>
+            </div>
+            <div>
+              <small>Contact</small>
+              <p>{{ announcement.contactNumber }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+
+    <div class="map-section">
+      <app-map [address]="announcement.pickupAddress" [height]="'320px'"></app-map>
+    </div>
+
+    <div class="related">
+      <div class="section-header small">
+        <div>
+          <h3>Related Offers</h3>
+          <p>Track beneficiary offers, accepted requests, and completed pickups.</p>
+        </div>
+      </div>
+
+      <div class="related-grid">
+        <mat-card class="related-card" *ngFor="let offer of relatedOffers">
+          <div class="offer-header">
+            <img [src]="offer.avatar" alt="{{ offer.name }}" />
+            <div>
+              <h4>{{ offer.name }}</h4>
+              <span>{{ offer.role }}</span>
+            </div>
+          </div>
+          <div class="offer-actions">
+            <button mat-stroked-button color="warn" (click)="openOffer(offer, 'decline')">Decline</button>
+            <button mat-raised-button color="primary" (click)="openOffer(offer, 'accept')">Accept</button>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </section>
+</ng-container>
+
+<ng-template #loadingTpl>
+  <div class="loading-state">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  </div>
+</ng-template>

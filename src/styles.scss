@@ -1,1 +1,49 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import 'leaflet/dist/leaflet.css';
+
+$replate-primary: mat.define-palette(mat.$amber-palette, 500, 300, 700);
+$replate-accent: mat.define-palette(mat.$light-blue-palette, 500, 300, 700);
+$replate-warn: mat.define-palette(mat.$red-palette);
+
+$replate-theme: mat.define-light-theme((
+  color: (
+    primary: $replate-primary,
+    accent: $replate-accent,
+    warn: $replate-warn
+  ),
+  typography: mat.define-typography-config($font-family: 'Poppins, sans-serif'),
+  density: 0
+));
+
+@include mat.all-component-themes($replate-theme);
+
+:root {
+  --replate-yellow: #ffc107;
+  --replate-blue: #2196f3;
+  --replate-bg: #f4f4f4;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: var(--replate-bg);
+  color: #1a1a1a;
+}
+
+mat-card {
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08) !important;
+}
+
+button[mat-icon-button] {
+  border-radius: 12px !important;
+}
+
+.mat-mdc-snack-bar-container {
+  border-radius: 999px !important;
+}

@@ -1,0 +1,149 @@
+:host {
+  display: block;
+}
+
+.section-header {
+  margin-bottom: 1.5rem;
+  h2 {
+    margin: 0;
+  }
+  p {
+    margin: 0.25rem 0 0;
+    color: #7a7a7a;
+  }
+}
+
+.pending mat-card {
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.pending-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+mat-card {
+  border-radius: 24px;
+  padding: 1.5rem;
+  background: #ffffff;
+  border: 1px solid #e7ecf5;
+  box-shadow: 0 30px 60px rgba(15, 23, 42, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+table {
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  border-collapse: collapse;
+
+  th {
+    background: #f5f7fb;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: #6b7485;
+    font-weight: 600;
+  }
+
+  td,
+  th {
+    padding: 1rem;
+  }
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  mat-form-field {
+    flex: 1 1 240px;
+  }
+}
+
+.table-wrapper {
+  overflow: auto;
+}
+
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e8f0fe;
+    color: #1a73e8;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .meta {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+}
+
+.stacked {
+  display: flex;
+  flex-direction: column;
+}
+
+.role-chip {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  background: rgba(33, 150, 243, 0.1);
+  color: #1a73e8;
+
+  &.admin {
+    background: rgba(233, 30, 99, 0.15);
+    color: #c2185b;
+  }
+
+  &.merchant {
+    background: rgba(255, 193, 7, 0.2);
+    color: #a67700;
+  }
+
+  &.association {
+    background: rgba(76, 175, 80, 0.2);
+    color: #2e7d32;
+  }
+}
+
+.status {
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  font-weight: 600;
+  &.success {
+    background: rgba(76, 175, 80, 0.15);
+    color: #2e7d32;
+  }
+  &.danger {
+    background: rgba(244, 67, 54, 0.15);
+    color: #c62828;
+  }
+}
+
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+}
+

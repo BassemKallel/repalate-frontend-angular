@@ -1,0 +1,119 @@
+<section class="announcements">
+  <div class="section-header">
+    <div>
+      <h2>My Announcements List</h2>
+      <p>Active announcements and their current statuses</p>
+    </div>
+    <button mat-raised-button color="primary" *ngIf="isMerchant" (click)="createAnnouncement()">
+      <mat-icon>add</mat-icon>
+      Create Announcement
+    </button>
+  </div>
+
+  <mat-card class="filters-card">
+    <div class="filters">
+      <mat-form-field appearance="outline">
+        <mat-label>Search</mat-label>
+        <input matInput (input)="applyFilter($event)" placeholder="Search announcements" />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-button-toggle-group
+        [value]="statusFilter"
+        (change)="setStatusFilter($event.value)"
+        class="status-toggle"
+        appearance="legacy"
+      >
+        <mat-button-toggle value="all">All</mat-button-toggle>
+        <mat-button-toggle value="approved">Approved</mat-button-toggle>
+        <mat-button-toggle value="pending">Pending</mat-button-toggle>
+        <mat-button-toggle value="deleted">Deleted</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Sort by</mat-label>
+      <mat-select>
+        <mat-option value="newest">Newest</mat-option>
+        <mat-option value="oldest">Oldest</mat-option>
+        <mat-option value="quantity">Quantity</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-card>
+
+  <div class="table-wrapper" *ngIf="!loading; else loadingTpl">
+    <table mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="image">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <img [src]="element.imageUrl || 'https://placehold.co/60x60'" alt="{{ element.title }}" />
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="title-cell">
+            <strong>{{ element.title }}</strong>
+            <small>{{ element.pickupAddress }}</small>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
+        <td mat-cell *matCellDef="let element">{{ element.category }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="quantity">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
+        <td mat-cell *matCellDef="let element">{{ element.quantity }} {{ element.unit }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>Type</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-chip [color]="element.type === 'FREE' ? 'primary' : 'accent'" selected>{{ element.type }}</mat-chip>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="expirationDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Expiration</th>
+        <td mat-cell *matCellDef="let element">{{ element.expirationDate | date: 'dd-MM-yyyy' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let element">
+          <span [class]="getStatusClass(element.status)">{{ element.status || 'Pending' }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-stroked-button color="primary" (click)="viewDetails(element)">View Offers</button>
+          <button mat-icon-button color="warn" (click)="deleteAnnouncement(element)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+  </div>
+
+  <ng-template #loadingTpl>
+    <div class="loading-state">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+  </ng-template>
+</section>

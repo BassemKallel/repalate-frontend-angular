@@ -1,0 +1,15 @@
+:host {
+  display: block;
+}
+
+:host ::ng-deep .mat-mdc-dialog-surface {
+  padding: 1.5rem;
+  border-radius: 20px;
+  min-width: 360px;
+  max-width: 480px;
+  padding: 30px
+}
+
+mat-dialog-actions {
+  gap: 1rem;
+}

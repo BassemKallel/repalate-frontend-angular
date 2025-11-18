@@ -1,0 +1,54 @@
+<section class="favorites">
+  <div class="section-header">
+    <div>
+      <h2>Favorites</h2>
+      <p>Keep track of saved announcements and merchants.</p>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!loading && favorites; else loadingTpl">
+    <div class="favorites-grid">
+      <mat-card class="fav-card">
+        <h3>Announcements</h3>
+        <div class="items">
+          <div class="announcement-item" *ngFor="let announcement of favorites.announcements">
+            <img [src]="announcement.imageUrl || 'https://placehold.co/80x80'" alt="{{ announcement.title }}" />
+            <div class="content">
+              <h4>{{ announcement.title }}</h4>
+              <p>{{ announcement.quantity }} {{ announcement.unit }} • {{ announcement.category }}</p>
+              <small>Pickup: {{ announcement.pickupAddress }}</small>
+            </div>
+            <button mat-icon-button color="warn" (click)="removeAnnouncement(announcement.id)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+          <p class="empty" *ngIf="favorites.announcements?.length === 0">No announcements saved yet.</p>
+        </div>
+      </mat-card>
+
+      <mat-card class="fav-card">
+        <h3>Merchants</h3>
+        <div class="items">
+          <div class="merchant-item" *ngFor="let merchant of favorites.merchants">
+            <div class="avatar">{{ merchant.fullName[0] }}</div>
+            <div class="content">
+              <h4>{{ merchant.fullName }}</h4>
+              <p>{{ merchant.location }}</p>
+              <small>{{ merchant.phoneNumber }}</small>
+            </div>
+            <button mat-icon-button color="warn" (click)="removeMerchant(merchant.id)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+          <p class="empty" *ngIf="favorites.merchants?.length === 0">No merchants saved yet.</p>
+        </div>
+      </mat-card>
+    </div>
+  </ng-container>
+
+  <ng-template #loadingTpl>
+    <div class="loading-state">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+  </ng-template>
+</section>

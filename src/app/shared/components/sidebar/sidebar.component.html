@@ -1,0 +1,34 @@
+<aside class="sidebar" [class.collapsed]="collapsed">
+  <div class="brand">
+    <div class="logo-dot"></div>
+    <div class="title">
+      <strong>Replate</strong>
+      <small>Dashboard</small>
+    </div>
+  </div>
+
+  <nav>
+    <ng-container *ngFor="let item of navItems">
+      <a
+        *ngIf="canDisplay(item)"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <mat-icon>{{ item.icon }}</mat-icon>
+        <span>{{ item.label }}</span>
+      </a>
+    </ng-container>
+  </nav>
+
+  <div class="footer">
+    <button mat-stroked-button color="primary" (click)="navigate('/dashboard/settings')">
+      <mat-icon>settings</mat-icon>
+      <span>Settings</span>
+    </button>
+    <button mat-button color="warn" (click)="logout.emit()">
+      <mat-icon>logout</mat-icon>
+      <span>Logout</span>
+    </button>
+  </div>
+</aside>

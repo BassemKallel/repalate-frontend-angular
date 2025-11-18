@@ -1,0 +1,50 @@
+:host {
+  display: block;
+}
+
+.section-header {
+  margin-bottom: 1.5rem;
+  h2 {
+    margin: 0;
+    font-size: 1.8rem;
+  }
+  p {
+    margin: 0.25rem 0 0;
+    color: #7a7a7a;
+  }
+}
+
+mat-card {
+  border-radius: 24px;
+  padding: 1.5rem;
+}
+
+table {
+  width: 100%;
+}
+
+.status {
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  font-weight: 600;
+  &.success {
+    background: rgba(76, 175, 80, 0.15);
+    color: #2e7d32;
+  }
+  &.danger {
+    background: rgba(244, 67, 54, 0.15);
+    color: #c62828;
+  }
+  &.warning {
+    background: rgba(255, 193, 7, 0.18);
+    color: #b88700;
+  }
+}
+
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+}
+
