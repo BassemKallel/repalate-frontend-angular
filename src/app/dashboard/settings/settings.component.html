@@ -1,32 +1,120 @@
-<section class="settings">
-  <div class="section-header">
-    <div>
-      <h2>Account Settings</h2>
-      <p>Update your contact information</p>
-    </div>
+<div class="settings-container">
+  <div class="settings-header">
+    <h1>Settings</h1>
+    <p class="subtitle">Manage your account preferences and privacy settings</p>
   </div>
 
-  <mat-card>
-    <form [formGroup]="profileForm" (ngSubmit)="save()">
-      <mat-form-field appearance="fill">
-        <mat-label>Username</mat-label>
-        <input matInput formControlName="username" />
-      </mat-form-field>
+  <div class="settings-content">
+    <mat-accordion multi>
+      <!-- Profile Section -->
+      <mat-expansion-panel [expanded]="section.expanded" *ngFor="let section of settingsSections" class="settings-section">
+        <mat-expansion-panel-header (click)="toggleSection(section)" class="section-header">
+          <mat-icon class="section-icon">{{section.icon}}</mat-icon>
+          <h3 class="section-title">{{section.title}}</h3>
+          <mat-icon class="expand-icon">{{section.expanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+        </mat-expansion-panel-header>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Phone</mat-label>
-        <input matInput formControlName="tel" />
-      </mat-form-field>
+        <form [formGroup]="section.formGroup" (ngSubmit)="saveSection(section)" class="settings-form">
+          <!-- Profile Picture Upload -->
+          <div *ngIf="section.title === 'Profile'" class="profile-picture-upload">
+            <div class="profile-image-container">
+              <img [src]="profileImage || 'assets/images/default-avatar.png'" alt="Profile" class="profile-image">
+              <button type="button" mat-icon-button color="primary" class="edit-button" (click)="fileInput.click()">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <input #fileInput type="file" accept="image/*" style="display: none" (change)="onFileSelected($event)">
+            </div>
+          </div>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Location</mat-label>
-        <input matInput formControlName="localisation" />
-      </mat-form-field>
+          <!-- Dynamic Form Fields -->
+          <div class="form-fields" [ngClass]="{'profile-fields': section.title === 'Profile'}">
+            <ng-container *ngFor="let field of section.fields">
+              <!-- Toggle Input -->
+              <mat-slide-toggle *ngIf="field.type === 'toggle'" 
+                               [formControlName]="field.name"
+                               [attr.disabled]="field.disabled ? true : null"
+                               class="setting-toggle">
+                {{field.label}}
+                <span class="hint" *ngIf="field.hint">{{field.hint}}</span>
+              </mat-slide-toggle>
 
-      <button mat-raised-button color="primary" [disabled]="loading">
-        <mat-progress-spinner *ngIf="loading" mode="indeterminate" diameter="20"></mat-progress-spinner>
-        <span *ngIf="!loading">Save changes</span>
+              <!-- Select Input -->
+              <mat-form-field appearance="outline" *ngIf="field.type === 'select'" class="setting-field">
+                <mat-label>{{field.label}}</mat-label>
+                <mat-select [formControlName]="field.name" [attr.required]="field.required ? true : null">
+                  <mat-option *ngFor="let option of field.options" [value]="option.value">
+                    {{option.label}}
+                  </mat-option>
+                </mat-select>
+                <mat-hint *ngIf="field.hint">{{field.hint}}</mat-hint>
+              </mat-form-field>
+
+              <!-- Text/Email/Password/Tel Input -->
+              <mat-form-field appearance="outline" *ngIf="['text', 'email', 'password', 'tel'].includes(field.type)" class="setting-field">
+                <mat-label>{{field.label}} <span *ngIf="field.required" class="required-asterisk">*</span></mat-label>
+                <input matInput 
+                       [type]="field.type" 
+                       [formControlName]="field.name" 
+                       [attr.required]="field.required ? true : null"
+                       [attr.disabled]="field.disabled ? true : null"
+                       [attr.minlength]="field.minLength || null"
+                       [attr.maxlength]="field.maxLength || null"
+                       [attr.pattern]="field.pattern || null"
+                       [placeholder]="field.hint || ''"
+                       (blur)="section.formGroup.get(field.name)?.markAsTouched()">
+                <mat-hint *ngIf="field.hint && !section.formGroup.get(field.name)?.errors" align="end">
+                  {{field.hint}}
+                </mat-hint>
+                <mat-error *ngIf="section.formGroup.get(field.name)?.errors && section.formGroup.get(field.name)?.touched">
+                  {{ getFieldError(section.formGroup, field.name) }}
+                </mat-error>
+              </mat-form-field>
+            </ng-container>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="form-actions">
+            <button mat-button type="button" 
+                    (click)="section.formGroup.reset(); section.formGroup.markAsPristine()" 
+                    [attr.disabled]="!section.formGroup.dirty || loading ? true : null"
+                    class="reset-button">
+              <mat-icon>refresh</mat-icon>
+              <span>Reset</span>
+            </button>
+            <button mat-raised-button 
+                    color="primary" 
+                    type="submit" 
+                    [attr.disabled]="!section.formGroup.valid || !section.formGroup.dirty || loading ? true : null"
+                    [class.loading]="loading"
+                    class="save-button">
+              <mat-spinner *ngIf="loading" diameter="20" color="accent"></mat-spinner>
+              <span *ngIf="!loading">
+                <mat-icon>save</mat-icon>
+                Save Changes
+              </span>
+            </button>
+          </div>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+
+  <!-- Danger Zone -->
+  <mat-card class="danger-zone">
+    <h3 class="danger-zone-title">
+      <mat-icon color="warn">warning</mat-icon>
+      Danger Zone
+    </h3>
+    <p>These actions are irreversible. Please proceed with caution.</p>
+    <div class="danger-actions">
+      <button mat-stroked-button color="warn" class="danger-button">
+        <mat-icon>delete_forever</mat-icon>
+        Delete Account
       </button>
-    </form>
+      <button mat-stroked-button color="warn" class="danger-button">
+        <mat-icon>logout</mat-icon>
+        Sign Out of All Devices
+      </button>
+    </div>
   </mat-card>
-</section>
+</div>

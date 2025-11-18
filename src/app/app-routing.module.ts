@@ -15,6 +15,7 @@ import { AdminAnnouncementsComponent } from './dashboard/admin/announcements/adm
 import { AdminTransactionsComponent } from './dashboard/admin/transactions/admin-transactions.component';
 import { AdminSignalsComponent } from './dashboard/admin/signals/admin-signals.component';
 import { SettingsComponent } from './dashboard/settings/settings.component';
+// Merchant module will be lazy loaded
 import { AuthGuard } from './auth/auth.guard';
 import { RoleGuard } from './auth/role.guard';
 
@@ -82,6 +83,10 @@ const routes: Routes = [
         component: AdminSignalsComponent,
         canActivate: [RoleGuard],
         data: { roles: ['ADMIN'] }
+      },
+      {
+        path: 'merchant',
+        loadChildren: () => import('./dashboard/merchant/merchant-dashboard.module').then(m => m.MerchantDashboardModule)
       }
     ]
   },

@@ -1,12 +1,309 @@
+@use '@angular/material' as mat;
+@import '../../../styles.scss';
+
 :host {
   display: block;
+  background-color: #f5f7fa;
+  min-height: 100%;
 }
 
-.section-header {
-  margin-bottom: 1.5rem;
-  h2 {
-    margin: 0;
+.settings-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  min-height: calc(100vh - 64px);
+  
+  @media (max-width: 599px) {
+    padding: 16px 8px;
   }
+}
+
+.settings-header {
+  margin-bottom: 32px;
+  text-align: center;
+  
+  h1 {
+    margin: 0 0 8px;
+    font-size: 2.2rem;
+    font-weight: 500;
+    color: mat.get-color-from-palette(mat.$indigo-palette, 800);
+  }
+  
+  .subtitle {
+    margin: 0;
+    color: mat.get-color-from-palette(mat.$gray-palette, 600);
+    font-size: 1rem;
+  }
+}
+
+.settings-section {
+  margin-bottom: 16px;
+  border-radius: 8px !important;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid mat.get-color-from-palette(mat.$gray-palette, 200);
+  
+  .section-header {
+    padding: 16px 24px;
+    height: auto;
+    min-height: 72px;
+    
+    .section-icon {
+      margin-right: 16px;
+      color: mat.get-color-from-palette(mat.$indigo-palette, 500);
+      background: mat.get-color-from-palette(mat.$indigo-palette, 50);
+      border-radius: 50%;
+      padding: 8px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .section-title {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: mat.get-color-from-palette(mat.$gray-palette, 800);
+    }
+    
+    .expand-icon {
+      margin-left: auto;
+      color: mat.get-color-from-palette(mat.$gray-palette, 500);
+    }
+  }
+  
+  .mat-expansion-panel-body {
+    padding: 0 24px 24px;
+  }
+}
+
+.settings-form {
+  padding-top: 16px;
+  
+  .required-asterisk {
+    color: mat.get-color-from-palette(mat.$red-palette, 500);
+    margin-left: 2px;
+  }
+  
+  .form-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+    
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
+    
+    .setting-field {
+      width: 100%;
+      
+      mat-form-field {
+        width: 100%;
+      }
+      
+      .mat-form-field-outline {
+        background-color: white;
+        border-radius: 4px;
+      }
+      
+      .mat-form-field-infix {
+        padding: 0.5em 0;
+      }
+      
+      .mat-form-field-wrapper {
+        padding-bottom: 0.5em;
+      }
+      
+      .mat-form-field-subscript-wrapper {
+        margin-top: 0.5em;
+      }
+      
+      mat-error {
+        font-size: 0.75rem;
+        line-height: 1.2;
+        margin-top: 4px;
+      }
+    }
+    
+    .setting-toggle {
+      display: flex;
+      align-items: center;
+      margin: 8px 0;
+      
+      .hint {
+        margin-left: 8px;
+        font-size: 0.8rem;
+        color: mat.get-color-from-palette(mat.$gray-palette, 500);
+      }
+    }
+  }
+  
+  .profile-picture-upload {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto 32px;
+    max-width: 200px;
+    
+    .profile-image-container {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      
+      .profile-image {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid mat.get-color-from-palette(mat.$indigo-palette, 100);
+        transition: all 0.3s ease;
+      }
+      
+      .edit-button {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background-color: mat.get-color-from-palette(mat.$indigo-palette, 500);
+        color: white;
+        
+        &:hover {
+          background-color: mat.get-color-from-palette(mat.$indigo-palette, 600);
+        }
+      }
+    }
+  }
+  
+  .form-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    margin-bottom: 24px;
+    
+    &.profile-fields {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+  }
+  
+  .setting-field {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+  
+  .setting-toggle {
+    display: flex;
+    align-items: center;
+    margin: 12px 0;
+    
+    .hint {
+      display: block;
+      font-size: 0.8rem;
+      color: mat.get-color-from-palette(mat.$gray-palette, 600);
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    padding: 24px 0 8px;
+    border-top: 1px solid mat.get-color-from-palette(mat.$gray-palette, 200);
+    margin-top: 16px;
+    
+    button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      
+      &.loading {
+        opacity: 0.8;
+        pointer-events: none;
+      }
+      
+      mat-spinner {
+        display: inline-block;
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+.danger-zone {
+  margin-top: 48px;
+  border-left: 4px solid mat.get-color-from-palette(mat.$red-palette, 500);
+  border-radius: 8px;
+  padding: 24px;
+  
+  .danger-zone-title {
+    display: flex;
+    align-items: center;
+    color: mat.get-color-from-palette(mat.$red-palette, 700);
+    margin-top: 0;
+    
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+  
+  p {
+    color: mat.get-color-from-palette(mat.$gray-palette, 600);
+    margin-bottom: 16px;
+  }
+  
+  .danger-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    
+    .danger-button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-width: 2px;
+      
+      &:hover {
+        background-color: rgba(mat.get-color-from-palette(mat.$red-palette, 50), 0.5);
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 959px) {
+  .form-fields {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .danger-actions {
+    flex-direction: column;
+    
+    .danger-button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}
+
+// Dark theme support
+:host-context(.dark-theme) {
+  background-color: mat.get-color-from-palette(mat.$gray-palette, 900);
+  
+  .settings-section {
+    background-color: mat.get-color-from-palette(mat.$gray-palette, 800);
+    border-color: mat.get-color-from-palette(mat.$gray-palette, 700);
+    
+    .section-title {
+      color: white;
+    }
+  }
+  
+  .form-actions {
+    border-color: mat.get-color-from-palette(mat.$gray-palette, 700);
+  }
+  
+  .danger-zone {
+    background-color: rgba(mat.get-color-from-palette(mat.$red-palette, 900), 0.2);
+  }
+}
+
 }
 
 mat-card {
@@ -26,3 +323,4 @@ form {
   }
 }
 
+}
