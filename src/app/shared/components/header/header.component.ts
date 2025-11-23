@@ -3,8 +3,17 @@ import { FormControl } from '@angular/forms';
 import { Subscription, debounceTime } from 'rxjs';
 import { UserRole } from '../../../shared/models/user';
 
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 @Component({
   selector: 'app-header',
+  standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule,MatIconModule,MatButtonModule,MatTooltipModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })

@@ -1,0 +1,41 @@
+<nav class="navbar">
+  <div class="nav-container">
+
+    <!-- Logo -->
+    <div class="nav-left brand">
+      <div class="logo-dot">
+        <img src="assets\images\logo-replate.png" alt="Replate Logo" />
+      </div>
+      <div class="title">
+        <a routerLink="/" class="logo">Replate</a>
+      </div>
+    </div>
+
+    <!-- Navigation Links -->
+    <ul class="nav-links nav-center" [class.active]="isMobileMenuOpen">
+      <li><a routerLink="/home">Home</a></li>
+      <li><a routerLink="/about">About Us</a></li>
+
+      <!-- Dropdown -->
+      <li class="dropdown">
+        <a (click)="toggleDropdown()">Services ▾</a>
+        <ul class="dropdown-menu" [class.show]="isDropdownOpen">
+          <li><a routerLink="/donate">Donate Food</a></li>
+          <li><a routerLink="/claim">Claim Food</a></li>
+          <li><a routerLink="/partners">Partners</a></li>
+        </ul>
+      </li>
+
+      <li><a routerLink="/contact">Contact</a></li>
+    </ul>
+
+    <!-- Login Button & Hamburger -->
+    <div class="nav-right">
+      <button class="login-btn" (click)="goToSignup()">Login / Register</button>
+      <div class="hamburger" (click)="toggleMobileMenu()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+
+  </div>
+</nav>

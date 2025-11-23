@@ -51,13 +51,17 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { SettingsComponent } from './dashboard/settings/settings.component';
 import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
+import { LocationPickerDialogModule } from './shared/components/location-dialog/location-dialog.module';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
+import { FooterComponent } from './shared/components/footer/footer.component';
 
+// Importing the HomeComponent
+import { HomeComponent } from './public/home/home.component';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     SignupComponent,
-    HeaderComponent,
     SidebarComponent,
     MapComponent,
     DashboardComponent,
@@ -105,7 +109,14 @@ import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confi
     MatDividerModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatExpansionModule
+    MatExpansionModule,
+
+    NavbarComponent,
+    FooterComponent,
+    HomeComponent, // Adding HomeComponent to the imports
+    LocationPickerDialogModule, 
+    HeaderComponent
+    
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

@@ -1,0 +1,189 @@
+@use '@angular/material' as mat;
+
+.navbar{
+  background: #fff;
+  box-shadow: inset;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      font-family: 'Poppins', sans-serif;
+
+
+}
+.nav-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0.8rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+/*  navbar left element         */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+    font-family: 'Poppins', sans-serif;
+
+
+  .logo-dot {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    background: #f4d06f;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+  }
+
+  .title {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    a {
+      font-size: 1.25rem;
+    }
+  }
+}
+/* Three parts: left, center, right */
+.nav-left {
+  flex: 0 0 auto;
+}
+
+.nav-center {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  list-style: none;
+  padding: 0;
+}
+
+.nav-right {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Nav links */
+.nav-links li a {
+  text-decoration: none;
+  color: #5a5a5a;
+  font-weight: 500;
+  transition: color 0.3s;
+    font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+}
+
+.nav-links li a:hover {
+  color: #f4d06f;
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
+
+/* Dropdown */
+.dropdown {
+  position: relative;
+}
+
+@media (min-width: 769px) {
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  list-style: none;
+  padding: 0.5rem 0;
+  width: 200px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: none;
+  z-index: 100;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-menu li {
+  padding: 0.5rem 1rem;
+}
+
+.dropdown-menu li a {
+  color: #333;
+  display: block;
+}
+
+.dropdown-menu li a:hover {
+  color: #f4d06f;
+}
+
+/* Login Button */
+.login-btn {
+  padding: 0.5rem 1.2rem;
+  border: none;
+  background: #f4d06f;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  background: #ffc107;
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: #333;
+  margin: 4px 0;
+  transition: 0.3s;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-center {
+    position: absolute;
+    top: 4rem;
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 0;
+    background: white;
+    text-align: center;
+    display: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  }
+
+  .nav-center.active {
+    display: flex;
+  }
+
+  .dropdown-menu {
+    position: static;
+    width: 100%;
+    box-shadow: none;
+  }
+}

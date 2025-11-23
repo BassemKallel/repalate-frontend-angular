@@ -1,0 +1,9 @@
+<div class="form-container">
+  <label for="location">Location</label>
+  <input id="location" type="text" [(ngModel)]="location" placeholder="Select Location" (click)="openDialog()" readonly>
+
+  <app-location-picker-dialog 
+      *ngIf="showDialog" 
+      (locationSelected)="onLocationSelected($event)">
+  </app-location-picker-dialog>
+</div>

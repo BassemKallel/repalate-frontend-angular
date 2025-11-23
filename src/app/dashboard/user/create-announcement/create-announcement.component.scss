@@ -47,12 +47,17 @@ form {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  height: match-content;
+  margin-bottom: 20px;
+
+
 
   button {
     position: relative;
     border-radius: 16px;
     justify-content: flex-start;
     gap: 0.5rem;
+    height: 100%;
 
     input {
       position: absolute;
@@ -60,6 +65,7 @@ form {
       opacity: 0;
       cursor: pointer;
     }
+
   }
 }
 
@@ -70,7 +76,6 @@ form {
 
   button {
     min-width: 140px;
-    border-radius: 999px;
+    border-radius: 10px;
   }
 }
-

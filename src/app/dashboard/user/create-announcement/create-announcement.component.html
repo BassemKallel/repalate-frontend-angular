@@ -49,6 +49,7 @@
         <mat-form-field appearance="fill">
           <mat-label>Pickup Address</mat-label>
           <input matInput formControlName="pickupAddress" placeholder="Enter your Location" />
+
         </mat-form-field>
 
         <mat-form-field appearance="fill">
@@ -59,8 +60,8 @@
 
       <div class="grid two">
         <div class="file-input">
-          <label>Donation Image</label>
-          <button mat-stroked-button color="primary" type="button">
+          <!--<label>Donation Image</label>-->
+          <button mat-stroked-button color="primary" type="button" class="upload-btn">
             <input type="file" accept="image/*" (change)="onFileSelected($event)" />
             <mat-icon>upload</mat-icon>
             <span>{{ announcementForm.value.imageUrl ? 'Image Selected' : 'Upload Image' }}</span>

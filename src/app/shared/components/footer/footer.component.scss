@@ -1,0 +1,148 @@
+.footer {
+  background-color: #111111;
+  color: #f4f4f4;
+  padding: 60px 0;
+  font-family: 'Poppins', sans-serif;
+
+  .container {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 40px;
+  }
+
+  .footer-brand {
+    max-width: 300px;
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      img {
+        width: 40px;
+        border-radius: 50%;
+      }
+
+      h3 {
+        color: #f4d06f;
+        font-size: 22px;
+        font-weight: 600;
+      }
+    }
+
+    p {
+      margin-top: 15px;
+      line-height: 1.6;
+      color: #d6d6d6;
+    }
+
+    .social-icons {
+      margin-top: 15px;
+      display: flex;
+      gap: 15px;
+
+      i {
+        background: #222;
+        padding: 10px;
+        border-radius: 50%;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 0.3s ease;
+
+        &:hover {
+          background: #f4d06f;
+          color: #000;
+        }
+      }
+    }
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 50px;
+
+    h4 {
+      color: #f4d06f;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        margin-bottom: 8px;
+        cursor: pointer;
+        color: #d6d6d6;
+
+        &:hover {
+          color: #ffffff;
+        }
+      }
+    }
+  }
+
+  .footer-bottom {
+    margin-top: 50px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 20px;
+    text-align: center;
+
+    p {
+      margin-bottom: 10px;
+      color: #bbb;
+      font-size: 14px;
+    }
+
+    .legal-links {
+      font-size: 14px;
+      color: #bbb;
+
+      a {
+        color: #bbb;
+        text-decoration: none;
+        margin: 0 5px;
+
+        &:hover {
+          color: #f4d06f;
+        }
+      }
+    }
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+    font-family: 'Poppins', sans-serif;
+
+
+  .logo-dot {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    background: #f4d06f;
+    //background: #ffc107;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+  }
+
+  .title {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    a {
+      font-size: 1.25rem;
+    }
+  }
+}

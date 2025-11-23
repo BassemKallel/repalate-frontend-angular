@@ -1,0 +1,37 @@
+<div class="location-dialog">
+  <div class="dialog-header">
+    <h2>Select Location</h2>
+    <button mat-icon-button (click)="closeDialog()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  
+  <div class="search-container">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search for a location</mat-label>
+      <input matInput 
+             type="text" 
+             (input)="onSearchChange($event)" 
+             [value]="selectedAddress"
+             placeholder="Enter an address or place">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+  
+  <div class="map-container" #mapContainer></div>
+  
+  <div class="selected-location" *ngIf="selectedAddress">
+    <mat-icon>location_on</mat-icon>
+    <span class="address">{{ selectedAddress }}</span>
+  </div>
+  
+  <div class="dialog-actions">
+    <button mat-button (click)="closeDialog()">Cancel</button>
+    <button mat-raised-button 
+            color="primary" 
+            (click)="selectLocation()"
+            [disabled]="!selectedAddress">
+      Select Location
+    </button>
+  </div>
+</div>

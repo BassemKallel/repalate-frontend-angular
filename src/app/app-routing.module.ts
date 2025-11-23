@@ -18,9 +18,13 @@ import { SettingsComponent } from './dashboard/settings/settings.component';
 // Merchant module will be lazy loaded
 import { AuthGuard } from './auth/auth.guard';
 import { RoleGuard } from './auth/role.guard';
+import { MerchantDashboardModule } from './dashboard/merchant/merchant-dashboard.module';
+import { HeaderComponent } from './shared/components/header/header.component';
+
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', loadChildren: () => import('./public/public.module').then(m => m.PublicModule) },
+  { path: 'app', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   {
@@ -85,8 +89,12 @@ const routes: Routes = [
         data: { roles: ['ADMIN'] }
       },
       {
-        path: 'merchant',
-        loadChildren: () => import('./dashboard/merchant/merchant-dashboard.module').then(m => m.MerchantDashboardModule)
+        path: 'merchant/dashboard',
+        loadChildren: () =>
+          import('./dashboard/merchant/merchant-dashboard.module')
+            .then(m => m.MerchantDashboardModule),
+        canActivate: [RoleGuard],
+        data: { roles: ['MERCHANT'] },
       }
     ]
   },

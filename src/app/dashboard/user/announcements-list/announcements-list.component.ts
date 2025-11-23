@@ -40,7 +40,26 @@ export class AnnouncementsListComponent implements OnInit {
     const request$ = this.isMerchant ? this.announcementService.getMyOffers() : this.announcementService.getAll();
     request$.subscribe({
       next: (announcements) => {
-        this.dataSource = new MatTableDataSource(announcements);
+        console.log('API Response:', announcements);
+
+        const mappedAnnouncements: Announcement[] = announcements.map((a: any) => ({
+            id: a.id,
+            title: a.title || '-',
+            category: a.category || '-',
+            quantity: a.quantity || '-',
+            unit: a.unit || '-',
+            expirationDate: a.expirationDate || null,
+            pickupAddress: a.pickupAddress || '-',
+            imageUrl: a.imageUrl || 'https://placehold.co/60x60',
+            contactNumber: a.contactNumber || '-',
+            type: a.type || '-',
+            status: a.status || 'Pending',
+            pricePerUnit: a.pricePerUnit || null,
+            createdAt: a.createdAt || '',
+            merchantName: a.merchantName || ''
+          }));
+
+        this.dataSource = new MatTableDataSource(mappedAnnouncements);
         setTimeout(() => {
           if (this.paginator) {
             this.dataSource.paginator = this.paginator;
