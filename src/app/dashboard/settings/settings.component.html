@@ -1,0 +1,112 @@
+<section class="settings">
+  <div class="section-header">
+    <div>
+      <h2>Account Settings</h2>
+      <p>Manage your profile and security settings</p>
+    </div>
+  </div>
+
+  <mat-card>
+    <mat-tab-group [(selectedIndex)]="selectedTab">
+      <!-- Profile Tab -->
+      <mat-tab label="Mon Profil">
+        <div class="tab-content">
+          <div class="readonly-info" *ngIf="currentUser">
+            <h3>Account Information</h3>
+            <div class="info-grid">
+              <div class="info-item">
+                <label>Email</label>
+                <span>{{ currentUser.email }}</span>
+              </div>
+              <div class="info-item">
+                <label>Role</label>
+                <span class="role-badge">{{ currentUser.role }}</span>
+              </div>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <h3>Edit Profile</h3>
+          <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+            <mat-form-field appearance="fill">
+              <mat-label>Username</mat-label>
+              <input matInput formControlName="username" />
+              <mat-error *ngIf="profileForm.get('username')?.hasError('required')">
+                Username is required
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Phone Number</mat-label>
+              <input matInput formControlName="phoneNumber" />
+              <mat-error *ngIf="profileForm.get('phoneNumber')?.hasError('required')">
+                Phone number is required
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Location</mat-label>
+              <input matInput formControlName="location" />
+              <mat-error *ngIf="profileForm.get('location')?.hasError('required')">
+                Location is required
+              </mat-error>
+            </mat-form-field>
+
+            <div class="actions">
+              <button mat-raised-button color="primary" type="submit" [disabled]="loadingProfile">
+                <mat-progress-spinner *ngIf="loadingProfile" mode="indeterminate" diameter="20"></mat-progress-spinner>
+                <span *ngIf="!loadingProfile">Save Changes</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-tab>
+
+      <!-- Password Tab -->
+      <mat-tab label="Sécurité">
+        <div class="tab-content">
+          <h3>Change Password</h3>
+          <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+            <mat-form-field appearance="fill">
+              <mat-label>Old Password</mat-label>
+              <input matInput type="password" formControlName="oldPassword" />
+              <mat-error *ngIf="passwordForm.get('oldPassword')?.hasError('required')">
+                Old password is required
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>New Password</mat-label>
+              <input matInput type="password" formControlName="newPassword" />
+              <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('required')">
+                New password is required
+              </mat-error>
+              <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('minlength')">
+                Password must be at least 6 characters
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Confirm New Password</mat-label>
+              <input matInput type="password" formControlName="confirmNewPassword" />
+              <mat-error *ngIf="passwordForm.get('confirmNewPassword')?.hasError('required')">
+                Please confirm your password
+              </mat-error>
+              <mat-error *ngIf="passwordForm.hasError('passwordMismatch')">
+                Passwords do not match
+              </mat-error>
+            </mat-form-field>
+
+            <div class="actions">
+              <button mat-raised-button color="primary" type="submit" [disabled]="loadingPassword">
+                <mat-progress-spinner *ngIf="loadingPassword" mode="indeterminate" diameter="20"></mat-progress-spinner>
+                <span *ngIf="!loadingPassword">Change Password</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</section>

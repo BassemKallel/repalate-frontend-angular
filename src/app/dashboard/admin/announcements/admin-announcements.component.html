@@ -1,0 +1,154 @@
+<section class="admin-announcements-shell">
+  <div class="section-header">
+    <div>
+      <h2>All Announcements</h2>
+      <p>Retrouvez les dernières annonces diffusées auprès des marchands et associations</p>
+    </div>
+    <button mat-raised-button color="primary" *ngIf="showCreateButton">
+      <mat-icon>add</mat-icon>
+      Nouvelle annonce
+    </button>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-cards">
+    <mat-card class="stat-card">
+      <div class="stat-icon total">
+        <mat-icon>campaign</mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3>{{ getTotalCount() }}</h3>
+        <p>Total Announcements</p>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-icon active">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3>{{ getAcceptedCount() }}</h3>
+        <p>Accepted</p>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-icon pending">
+        <mat-icon>schedule</mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3>{{ getPendingCount() }}</h3>
+        <p>Pending</p>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-icon review">
+        <mat-icon>rate_review</mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3>{{ getReviewCount() }}</h3>
+        <p>In Review</p>
+      </div>
+    </mat-card>
+  </div>
+
+  <mat-card class="table-card">
+    <div class="filters">
+      <mat-form-field appearance="outline">
+        <mat-label>Rechercher</mat-label>
+        <input matInput placeholder="ID, titre" [(ngModel)]="filterText" (ngModelChange)="applyFilters()" />
+        <button mat-icon-button matSuffix *ngIf="filterText" (click)="filterText = ''; applyFilters()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Statut</mat-label>
+        <mat-select [(ngModel)]="statusFilter" (selectionChange)="applyFilters()">
+          <mat-option value="all">Tous</mat-option>
+          <mat-option value="Pending">Pending</mat-option>
+          <mat-option value="Review">Review</mat-option>
+          <mat-option value="Accepted">Accepted</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-stroked-button (click)="clearFilters()" class="reset-button">
+        <mat-icon>refresh</mat-icon>
+        Réinitialiser
+      </button>
+    </div>
+
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z2">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let item">
+            <span class="id-badge">#{{ item.originalId }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Title</th>
+          <td mat-cell *matCellDef="let item">
+            <strong>{{ item.title }}</strong>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef>Category</th>
+          <td mat-cell *matCellDef="let item">
+            <mat-chip [class]="'category-' + (item.category?.toLowerCase() || 'unknown')">
+              {{ item.category || 'N/A' }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="stock">
+          <th mat-header-cell *matHeaderCellDef>Stock</th>
+          <td mat-cell *matCellDef="let item">{{ item.stock }} {{ item.unit }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>Type</th>
+          <td mat-cell *matCellDef="let item">
+            <mat-chip [class]="'type-' + (item.announcementType?.toLowerCase() || 'unknown')">
+              {{ item.announcementType || 'N/A' }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="expiryDate">
+          <th mat-header-cell *matHeaderCellDef>Expiry Date</th>
+          <td mat-cell *matCellDef="let item">{{ item.expiryDate }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let item">
+            <mat-chip [class]="'status-' + item.status.toLowerCase()">
+              {{ item.status }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="actions">Actions</th>
+          <td mat-cell *matCellDef="let item" class="actions">
+            <button mat-icon-button matTooltip="View">
+              <mat-icon>visibility</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" matTooltip="Delete" (click)="confirmDelete(item)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+  </mat-card>
+</section>

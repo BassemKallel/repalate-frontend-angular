@@ -1,0 +1,28 @@
+<section class="admin-signals-shell">
+  <header>
+    <div>
+      <h2>Signalements</h2>
+      <p>Investiguer les alertes remontées par la communauté.</p>
+    </div>
+    <button mat-stroked-button color="primary">
+      <mat-icon>auto_fix</mat-icon>
+      Marquer tout comme résolu
+    </button>
+  </header>
+
+  <mat-card *ngFor="let signal of signals" class="signal-card">
+    <mat-card-header>
+      <mat-card-title>{{ signal.reason }}</mat-card-title>
+      <mat-card-subtitle>Reporté par {{ signal.reporter }} · {{ signal.createdAt }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Placeholder de description du signal. Un résumé plus détaillé sera chargé depuis l'API.</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <span class="status-chip" [ngClass]="signal.status.toLowerCase()">{{ signal.status }}</span>
+      <span class="spacer"></span>
+      <button mat-button color="primary">Assigner</button>
+      <button mat-stroked-button>Marquer comme résolu</button>
+    </mat-card-actions>
+  </mat-card>
+</section>

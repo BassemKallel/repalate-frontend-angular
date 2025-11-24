@@ -1,0 +1,157 @@
+<app-public-header></app-public-header>
+<section class="public-announcements">
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Browse Food Announcements</h1>
+            <p>Discover available food donations and sales from local merchants</p>
+
+            <div class="search-bar">
+                <mat-icon>search</mat-icon>
+                <input type="text" placeholder="Search for food items..." [(ngModel)]="searchTerm"
+                    (ngModelChange)="onSearchChange()" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Filters -->
+    <div class="categories-section">
+        <div class="categories-scroll">
+            <button *ngFor="let category of categories" class="category-pill"
+                [class.active]="selectedCategory === category.id" (click)="selectCategory(category.id)">
+                <mat-icon>{{ category.icon }}</mat-icon>
+                <span>{{ category.label }}</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Type Filters & Sort -->
+    <div class="filters-bar">
+        <div class="filters-container">
+            <div class="filter-group">
+                <mat-icon>filter_list</mat-icon>
+                <span class="filter-label">Type:</span>
+                <button class="type-filter" [class.active]="selectedType === 'all'" (click)="selectType('all')">
+                    All
+                </button>
+                <button class="type-filter donation" [class.active]="selectedType === 'DONATION'"
+                    (click)="selectType('DONATION')">
+                    <mat-icon>volunteer_activism</mat-icon>
+                    Donation
+                </button>
+                <button class="type-filter sale" [class.active]="selectedType === 'SALE'" (click)="selectType('SALE')">
+                    <mat-icon>shopping_cart</mat-icon>
+                    Sale
+                </button>
+            </div>
+
+            <div class="sort-group">
+                <mat-icon>sort</mat-icon>
+                <mat-form-field appearance="outline" class="sort-select">
+                    <mat-select [(ngModel)]="sortBy" (selectionChange)="applyFilters()">
+                        <mat-option value="recent">Most Recent</mat-option>
+                        <mat-option value="expiry">Expiring Soon</mat-option>
+                        <mat-option value="stock">Highest Stock</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results-section">
+        <div class="results-header">
+            <h2>{{ selectedCategory === 'all' ? 'All Announcements' : getCategoryLabel(selectedCategory) }}</h2>
+            <p class="results-count">{{ totalItems }} {{ totalItems === 1 ? 'result' : 'results' }}</p>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="loading" class="loading-state">
+            <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!loading && paginatedAnnouncements.length === 0" class="empty-state">
+            <mat-icon>inventory_2</mat-icon>
+            <h3>No announcements found</h3>
+            <p>Try adjusting your filters or search term</p>
+        </div>
+
+        <!-- Announcements Grid -->
+        <div *ngIf="!loading && paginatedAnnouncements.length > 0" class="announcements-grid">
+            <mat-card *ngFor="let announcement of paginatedAnnouncements" class="announcement-card">
+                <!-- Type Badge Overlay -->
+                <div class="type-badge-overlay" [class]="'badge-' + announcement.announcementType.toLowerCase()">
+                    <mat-icon>{{ getTypeIcon(announcement.announcementType) }}</mat-icon>
+                    <span>{{ announcement.announcementType }}</span>
+                </div>
+
+                <!-- Image with Category Icon -->
+                <div class="card-image"
+                    [style.background-image]="announcement.imageUrl1 ? 'url(' + announcement.imageUrl1 + ')' : 'none'"
+                    [style.background-color]="!announcement.imageUrl1 ? getImagePlaceholder(announcement.category) : 'transparent'">
+                    <div class="image-overlay" [class.with-image]="announcement.imageUrl1">
+                        <mat-icon class="category-icon" *ngIf="!announcement.imageUrl1">{{
+                            getCategoryIcon(announcement.category) }}</mat-icon>
+                    </div>
+
+                    <!-- Expiry Badge -->
+                    <div class="expiry-badge" *ngIf="announcement.expiryDate">
+                        <mat-icon>schedule</mat-icon>
+                        <span>{{ announcement.expiryDate | date: 'dd MMM' }}</span>
+                    </div>
+                </div>
+
+                <!-- Card Content -->
+                <div class="card-content">
+                    <div class="card-header">
+                        <h3>{{ announcement.title }}</h3>
+                        <mat-chip class="category-chip">
+                            {{ getCategoryLabel(announcement.category) }}
+                        </mat-chip>
+                    </div>
+
+                    <p class="description">{{ announcement.description || 'Fresh quality food available for pickup' }}
+                    </p>
+
+                    <div class="card-meta">
+                        <div class="meta-item stock">
+                            <mat-icon>inventory</mat-icon>
+                            <span class="value">{{ announcement.stock }}</span>
+                            <span class="unit">{{ announcement.unit }}</span>
+                        </div>
+
+                        <div class="meta-item location">
+                            <mat-icon>place</mat-icon>
+                            <span>Merchant #{{ announcement.merchantId }}</span>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="price-info" *ngIf="announcement.announcementType === 'SALE'">
+                            <mat-icon>shopping_cart</mat-icon>
+                            <span>For Sale</span>
+                        </div>
+                        <div class="donation-info" *ngIf="announcement.announcementType === 'DONATION'">
+                            <mat-icon>favorite</mat-icon>
+                            <span>Free Donation</span>
+                        </div>
+
+                        <button mat-raised-button color="primary" class="view-btn"
+                            (click)="viewDetails(announcement.id)">
+                            <mat-icon>visibility</mat-icon>
+                            View Details
+                        </button>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+
+        <!-- Pagination -->
+        <mat-paginator *ngIf="!loading && totalItems > 0" [length]="totalItems" [pageSize]="pageSize"
+            [pageSizeOptions]="[12, 24, 48]" (page)="onPageChange($event)" showFirstLastButtons></mat-paginator>
+    </div>
+</section>
+
+<!-- Footer -->
+<app-public-footer></app-public-footer>

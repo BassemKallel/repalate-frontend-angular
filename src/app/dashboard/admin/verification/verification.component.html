@@ -1,0 +1,130 @@
+<section class="verification-shell">
+  <div class="section-header">
+    <div>
+      <h2>Account Verification</h2>
+      <p>Review pending merchant and association registrations</p>
+    </div>
+    <mat-button-toggle-group [(ngModel)]="selectedStatus" name="status">
+      <mat-button-toggle value="all">All</mat-button-toggle>
+      <mat-button-toggle value="merchant">Merchants</mat-button-toggle>
+      <mat-button-toggle value="association">Associations</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-cards" *ngIf="!loading">
+    <mat-card class="stat-card">
+      <div class="stat-icon total">
+        <mat-icon>pending_actions</mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3>{{ getTotalCount() }}</h3>
+        <p>Total Pending</p>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-icon merchants">
+        <mat-icon>store</mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3>{{ getMerchantsCount() }}</h3>
+        <p>Merchants</p>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-icon associations">
+        <mat-icon>volunteer_activism</mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3>{{ getAssociationsCount() }}</h3>
+        <p>Associations</p>
+      </div>
+    </mat-card>
+  </div>
+
+  <mat-card class="table-card">
+    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+    <div class="empty-state" *ngIf="!loading && !filteredAccounts().length">
+      <div class="icon-wrapper">
+        <mat-icon>verified</mat-icon>
+      </div>
+      <h3>Aucune vérification en attente</h3>
+      <p>Toutes les demandes ont déjà été examinées. Reviens plus tard ou actualise pour vérifier les nouvelles
+        inscriptions.</p>
+      <button mat-stroked-button color="primary" (click)="loadPendingAccounts()">
+        <mat-icon>refresh</mat-icon>
+        Actualiser
+      </button>
+    </div>
+
+    <div class="table-wrapper" *ngIf="!loading && filteredAccounts().length">
+      <table mat-table [dataSource]="filteredAccounts()" class="mat-elevation-z2">
+        <ng-container matColumnDef="fullName">
+          <th mat-header-cell *matHeaderCellDef>Applicant</th>
+          <td mat-cell *matCellDef="let user">
+            <div class="user-cell">
+              <div class="avatar">{{ (user.fullName || user.username || user.email || 'U').charAt(0) }}</div>
+              <div>
+                <strong>{{ user.fullName || user.username || user.email || 'Unknown' }}</strong>
+                <div class="meta">
+                  <span class="muted">{{ user.email || user.username || 'N/A' }}</span>
+                </div>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef>Role</th>
+          <td mat-cell *matCellDef="let user">
+            <mat-chip [class]="'role-' + (user.role?.toLowerCase() || 'unknown')">
+              {{ user.role | titlecase }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef>Contact</th>
+          <td mat-cell *matCellDef="let user">
+            <div class="stacked">
+              <span>{{ user.phoneNumber || user.phone || 'N/A' }}</span>
+              <small class="muted">{{ user.location || user.city || 'N/A' }}</small>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="document">
+          <th mat-header-cell *matHeaderCellDef>Document</th>
+          <td mat-cell *matCellDef="let user">
+            <a *ngIf="user.documentUrl; else noDoc" [href]="user.documentUrl" target="_blank" rel="noopener"
+              class="document-link">
+              <mat-icon>description</mat-icon>
+              View
+            </a>
+            <ng-template #noDoc>
+              <span class="muted">No document</span>
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="actions">Actions</th>
+          <td mat-cell *matCellDef="let user" class="actions">
+            <button mat-icon-button color="warn" matTooltip="Reject" (click)="reject(user)">
+              <mat-icon>close</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" matTooltip="Approve" (click)="approve(user)">
+              <mat-icon>check_circle</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['fullName', 'role', 'phone', 'document', 'actions']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['fullName', 'role', 'phone', 'document', 'actions'];"></tr>
+      </table>
+    </div>
+  </mat-card>
+</section>

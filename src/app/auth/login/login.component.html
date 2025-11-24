@@ -1,0 +1,53 @@
+<section class="login-shell">
+  <div class="hero-pane">
+    <div class="logo-chip">
+      <img src="/assets/images/logo-replate.png" alt="Replate Logo" class="logo-image">
+    </div>
+    <div class="hero-content">
+      <h1>Together, we create lasting impact</h1>
+      <p>Join changemakers. Donate, track impact, and see real results — all in one app.</p>
+    </div>
+  </div>
+
+  <div class="form-pane">
+    <mat-card>
+      <div class="card-header">
+        <h2>Welcome Back to Replate!</h2>
+        <p>Sign in to your merchant, association, or individual space.</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="submit()" class="login-form">
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput placeholder="you@example.com" formControlName="email" />
+          <mat-error *ngIf="loginForm.get('email')?.hasError('required')">Email is required</mat-error>
+          <mat-error *ngIf="loginForm.get('email')?.hasError('email')">Enter a valid email</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            placeholder="Enter your password"
+            formControlName="password"
+          />
+          <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">Password is required</mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" class="submit-btn" [disabled]="isLoading">
+          <mat-progress-spinner *ngIf="isLoading" mode="indeterminate" diameter="20"></mat-progress-spinner>
+          <span *ngIf="!isLoading">Login</span>
+        </button>
+      </form>
+
+      <div class="card-footer">
+        <span>Don't have an account?</span>
+        <button mat-button color="accent" type="button" (click)="goToSignup()">Register</button>
+      </div>
+    </mat-card>
+  </div>
+</section>

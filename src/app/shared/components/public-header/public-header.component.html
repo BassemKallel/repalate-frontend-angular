@@ -1,0 +1,37 @@
+<header class="public-header">
+    <div class="header-container">
+        <!-- Logo -->
+        <a routerLink="/" class="logo">
+            <div class="logo-icon">
+                <img src="assets/images/logo-icon.svg" alt="Replate Logo" onerror="this.style.display='none'">
+                <mat-icon *ngIf="true">recycling</mat-icon> <!-- Fallback icon -->
+            </div>
+            <span class="logo-text">Replate</span>
+        </a>
+
+        <!-- Navigation -->
+        <nav class="nav-links">
+            <a [routerLink]="['/']" fragment="how-it-works">How it works</a>
+            <a [routerLink]="['/']" fragment="impact">Impact</a>
+            <a [routerLink]="['/']" fragment="get-involved">Get Involved</a>
+        </nav>
+
+        <!-- Actions -->
+        <div class="header-actions">
+            <a routerLink="/login" class="btn-signin">Sign In</a>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button class="mobile-menu-btn" (click)="toggleMenu()">
+            <mat-icon>menu</mat-icon>
+        </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" [class.open]="isMenuOpen">
+        <a [routerLink]="['/']" fragment="how-it-works" (click)="toggleMenu()">How it works</a>
+        <a [routerLink]="['/']" fragment="impact" (click)="toggleMenu()">Impact</a>
+        <a [routerLink]="['/']" fragment="get-involved" (click)="toggleMenu()">Get Involved</a>
+        <a routerLink="/login" class="btn-signin" (click)="toggleMenu()">Sign In</a>
+    </div>
+</header>

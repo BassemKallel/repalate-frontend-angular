@@ -1,0 +1,86 @@
+<section class="create-form">
+  <div class="section-header">
+    <div>
+      <h2>Create new Announcement</h2>
+      <p>Fill in the details of the food you want to donate or sell.</p>
+    </div>
+    <button mat-stroked-button color="primary" routerLink="/dashboard/announcements">
+      <mat-icon>arrow_back</mat-icon>
+      Back to list
+    </button>
+  </div>
+
+  <mat-card>
+    <form [formGroup]="announcementForm" (ngSubmit)="submit()">
+      <div class="grid two">
+        <mat-form-field appearance="fill">
+          <mat-label>Food Title</mat-label>
+          <input matInput formControlName="title" placeholder="Enter your Food title" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Food Category</mat-label>
+          <mat-select formControlName="category">
+            <mat-option *ngFor="let category of categories" [value]="category.value">{{ category.label }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" placeholder="Describe your food item" rows="3"></textarea>
+      </mat-form-field>
+
+      <div class="grid three">
+        <mat-form-field appearance="fill">
+          <mat-label>Stock</mat-label>
+          <input matInput type="number" min="1" formControlName="stock" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Unit</mat-label>
+          <mat-select formControlName="unit">
+            <mat-option *ngFor="let unit of units" [value]="unit.value">{{ unit.label }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Expiration Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="expiryDate" />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="grid two">
+        <div class="file-input">
+          <label>Donation Image</label>
+          <button mat-stroked-button color="primary" type="button">
+            <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+            <mat-icon>upload</mat-icon>
+            <span>{{ announcementForm.value.imageUrl1 ? 'Image Selected' : 'Upload Image' }}</span>
+            <mat-progress-bar *ngIf="uploading" mode="indeterminate"></mat-progress-bar>
+          </button>
+        </div>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Announcement Type</mat-label>
+          <mat-select formControlName="announcementType">
+            <mat-option *ngFor="let type of types" [value]="type.value">{{ type.label }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="fill" *ngIf="announcementForm.value.announcementType === 'SALE'">
+        <mat-label>Price (TND / {{ announcementForm.value.unit }})</mat-label>
+        <input matInput type="number" min="1" formControlName="price" />
+      </mat-form-field>
+
+      <div class="actions">
+        <button mat-stroked-button type="button" (click)="cancel()">Cancel</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting">
+          <mat-progress-spinner *ngIf="isSubmitting" diameter="20" mode="indeterminate"></mat-progress-spinner>
+          <span *ngIf="!isSubmitting">Apply</span>
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</section>

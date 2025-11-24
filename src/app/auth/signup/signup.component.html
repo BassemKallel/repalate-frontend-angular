@@ -1,0 +1,94 @@
+<section class="signup-shell">
+  <div class="hero-pane">
+    <div class="logo-chip">
+      <img src="/assets/images/logo-replate.png" alt="Replate Logo" class="logo-image">
+    </div>
+    <div class="hero-content">
+      <h1>Together, we create lasting impact</h1>
+      <p>Join changemakers. Donate, track impact, and see real results — all in one app.</p>
+    </div>
+  </div>
+
+  <div class="form-pane">
+    <mat-card>
+      <div class="card-header">
+        <h2>Get Started with Replate</h2>
+        <p>Register to donate, receive, or volunteer</p>
+      </div>
+
+      <div class="role-toggle">
+        <button
+          mat-raised-button
+          *ngFor="let item of roles"
+          [color]="signupForm.value.role === item.key ? 'primary' : undefined"
+          (click)="selectRole(item.key)"
+          type="button"
+        >
+          {{ item.label }}
+        </button>
+      </div>
+
+      <form class="signup-form" [formGroup]="signupForm" (ngSubmit)="submit()">
+        <div class="grid two">
+          <mat-form-field appearance="fill">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username" />
+          </mat-form-field>
+        </div>
+
+        <div class="grid two">
+          <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Phone Number</mat-label>
+            <span matPrefix class="flag-chip">TN&nbsp;</span>
+            <input matInput formControlName="phoneNumber" />
+          </mat-form-field>
+        </div>
+
+        <div class="grid two">
+          <mat-form-field appearance="fill">
+            <mat-label>Location</mat-label>
+            <input matInput formControlName="location" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password" />
+          </mat-form-field>
+        </div>
+
+        <div class="grid two">
+          <mat-form-field appearance="fill">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput type="password" formControlName="confirmPassword" />
+          </mat-form-field>
+        </div>
+
+        <div class="file-field" *ngIf="signupForm.value.role !== 'INDIVIDUAL'">
+          <label>Verification Document <span style="color: red">*</span></label>
+          <button mat-stroked-button color="primary" type="button">
+            <input type="file" (change)="onFileSelected($event, 'documentUrl')" 
+                   accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif" />
+            Choose a Doc
+          </button>
+          <span class="file-hint" *ngIf="signupForm.value.documentUrl">Uploaded ✓</span>
+          <mat-error *ngIf="signupForm.get('documentUrl')?.hasError('required')">
+            Verification document is required for {{ signupForm.value.role.toLowerCase() }} accounts
+          </mat-error>
+        </div>
+
+        <div class="actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting">
+            <mat-progress-spinner *ngIf="isSubmitting" diameter="20" mode="indeterminate"></mat-progress-spinner>
+            <span *ngIf="!isSubmitting">Sign Up</span>
+          </button>
+          <button mat-button color="accent" type="button" routerLink="/login">Already have an account? Log In</button>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</section>

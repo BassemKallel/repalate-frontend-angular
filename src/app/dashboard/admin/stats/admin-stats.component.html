@@ -1,0 +1,30 @@
+<section class="admin-stats-shell">
+  <header>
+    <div>
+      <h2>Statistiques globales</h2>
+      <p>Un aperçu rapide des métriques clés pour les administrateurs.</p>
+    </div>
+    <button mat-stroked-button color="primary">
+      <mat-icon>refresh</mat-icon>
+      Mettre à jour
+    </button>
+  </header>
+
+  <div class="stat-tiles">
+    <article *ngFor="let tile of statTiles" [class.up]="tile.trendUp" [class.down]="tile.trendUp === false">
+      <h3>{{ tile.label }}</h3>
+      <strong>{{ tile.value }}</strong>
+      <span>{{ tile.trend }}</span>
+    </article>
+  </div>
+
+  <mat-card class="placeholder-card">
+    <mat-card-header>
+      <mat-card-title>Activité hebdomadaire</mat-card-title>
+      <mat-card-subtitle>Données simulées</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Ce bloc affichera bientôt des graphiques et indicateurs dynamiques.</p>
+    </mat-card-content>
+  </mat-card>
+</section>

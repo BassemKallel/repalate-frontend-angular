@@ -1,0 +1,205 @@
+<app-public-header *ngIf="isPublicView"></app-public-header>
+<ng-container *ngIf="!loading && announcement; else loadingTpl">
+  <section class="details" [class.public-view]="isPublicView">
+    <!-- Page Header - Only show in dashboard view -->
+    <div class="page-header" *ngIf="!isPublicView">
+      <div class="header-content">
+        <h1>Announcement Details</h1>
+        <p>View all the information about this {{ announcement.announcementType === 'DONATION' ? 'donation' : 'sale' }},
+          including food details and availability.</p>
+      </div>
+      <div class="header-actions">
+        <button mat-stroked-button color="warn" (click)="delete()">
+          <mat-icon>delete</mat-icon>
+          Delete
+        </button>
+        <button mat-raised-button color="primary" (click)="edit()">
+          <mat-icon>edit</mat-icon>
+          Edit
+        </button>
+      </div>
+    </div>
+
+    <mat-card class="announcement-card">
+      <div class="announcement-content">
+        <!-- Image Section -->
+        <div class="image-container">
+          <img [src]="announcement.imageUrl1 || 'https://placehold.co/400x400'" alt="{{ announcement.title }}" />
+          <div class="status-badge" [class]="getStatusClass(announcement.moderationStatus)" *ngIf="!isPublicView">
+            {{ announcement.moderationStatus || 'Pending' }}
+          </div>
+        </div>
+
+        <!-- Details Section -->
+        <div class="details-section">
+          <div class="announcement-id" *ngIf="!isPublicView">ID AN-{{ announcement.id.toString().padStart(3, '0') }}
+          </div>
+          <h2 class="announcement-title">{{ announcement.title }}</h2>
+
+          <div class="meta-info">
+            <span>{{ announcement.category }}</span>
+            <span class="separator">•</span>
+            <span>{{ announcement.announcementType === 'DONATION' ? 'Free' : announcement.price + ' TND' }}</span>
+            <span class="separator">•</span>
+            <span>{{ announcement.stock }} {{ announcement.unit }}</span>
+          </div>
+
+          <p class="expiry-info">
+            {{ announcement.stock }} {{ announcement.unit }} of food {{ announcement.announcementType === 'DONATION' ?
+            'Donated' : 'For Sale' }} expired at {{ announcement.expiryDate | date: 'dd-MM-yyyy' }}
+          </p>
+
+          <!-- Merchant Info -->
+          <div class="merchant-info">
+            <div class="merchant-avatar">
+              <mat-icon>store</mat-icon>
+            </div>
+            <div class="merchant-details">
+              <div class="merchant-name">Merchant #{{ announcement.merchantId }}</div>
+              <div class="merchant-meta">Merchant</div>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="description-section" *ngIf="announcement.description">
+            <h3>Description</h3>
+            <p>{{ announcement.description }}</p>
+          </div>
+
+          <!-- Additional Info -->
+          <div class="info-grid">
+            <div class="info-item">
+              <mat-icon>{{ getCategoryIcon(announcement.category) }}</mat-icon>
+              <div>
+                <label>Category</label>
+                <span>{{ announcement.category }}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <mat-icon>inventory_2</mat-icon>
+              <div>
+                <label>Stock Available</label>
+                <span>{{ announcement.stock }} {{ announcement.unit }}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <mat-icon>event</mat-icon>
+              <div>
+                <label>Expiry Date</label>
+                <span>{{ announcement.expiryDate | date: 'dd MMM yyyy' }}</span>
+              </div>
+            </div>
+
+            <div class="info-item" *ngIf="announcement.price && announcement.announcementType === 'SALE'">
+              <mat-icon>payments</mat-icon>
+              <div>
+                <label>Price</label>
+                <span>{{ announcement.price }} TND / {{ announcement.unit }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Public View: Reservation -->
+          <div class="reservation-section" *ngIf="isPublicView">
+            <mat-divider></mat-divider>
+            <h3>Make a Reservation</h3>
+            <div class="reservation-controls">
+              <mat-form-field appearance="outline" class="quantity-input">
+                <mat-label>Quantity</mat-label>
+                <input matInput type="number" [(ngModel)]="reservationQuantity" [min]="1" [max]="announcement.stock">
+                <span matSuffix>{{ announcement.unit }}</span>
+              </mat-form-field>
+              <button mat-raised-button color="primary" (click)="reserve()">
+                <mat-icon>shopping_basket</mat-icon>
+                Réserver
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- Similar Products Section - Only in public view -->
+    <div class="similar-products" *ngIf="isPublicView && similarAnnouncements.length > 0">
+      <h2>Similar Products</h2>
+      <div class="similar-products-grid">
+        <mat-card *ngFor="let similar of similarAnnouncements" class="announcement-card">
+          <!-- Type Badge Overlay -->
+          <div class="type-badge-overlay" [class]="'badge-' + similar.announcementType.toLowerCase()">
+            <mat-icon>{{ getTypeIcon(similar.announcementType) }}</mat-icon>
+            <span>{{ similar.announcementType }}</span>
+          </div>
+
+          <!-- Image with Category Icon -->
+          <div class="card-image"
+            [style.background-image]="similar.imageUrl1 ? 'url(' + similar.imageUrl1 + ')' : 'none'"
+            [style.background-color]="!similar.imageUrl1 ? getImagePlaceholder(similar.category) : 'transparent'">
+            <div class="image-overlay" [class.with-image]="similar.imageUrl1">
+              <mat-icon class="category-icon" *ngIf="!similar.imageUrl1">{{ getCategoryIcon(similar.category)
+                }}</mat-icon>
+            </div>
+
+            <!-- Expiry Badge -->
+            <div class="expiry-badge" *ngIf="similar.expiryDate">
+              <mat-icon>schedule</mat-icon>
+              <span>{{ similar.expiryDate | date: 'dd MMM' }}</span>
+            </div>
+          </div>
+
+          <!-- Card Content -->
+          <div class="card-content">
+            <div class="card-header">
+              <h3>{{ similar.title }}</h3>
+              <mat-chip class="category-chip">
+                {{ getCategoryLabel(similar.category) }}
+              </mat-chip>
+            </div>
+
+            <p class="description">{{ similar.description || 'Fresh quality food available for pickup' }}</p>
+
+            <div class="card-meta">
+              <div class="meta-item stock">
+                <mat-icon>inventory</mat-icon>
+                <span class="value">{{ similar.stock }}</span>
+                <span class="unit">{{ similar.unit }}</span>
+              </div>
+
+              <div class="meta-item location">
+                <mat-icon>place</mat-icon>
+                <span>Merchant #{{ similar.merchantId }}</span>
+              </div>
+            </div>
+
+            <div class="card-footer">
+              <div class="price-info" *ngIf="similar.announcementType === 'SALE'">
+                <mat-icon>shopping_cart</mat-icon>
+                <span>For Sale</span>
+              </div>
+              <div class="donation-info" *ngIf="similar.announcementType === 'DONATION'">
+                <mat-icon>favorite</mat-icon>
+                <span>Free Donation</span>
+              </div>
+
+              <button mat-raised-button color="primary" class="view-btn" (click)="viewSimilarProduct(similar.id)">
+                <mat-icon>visibility</mat-icon>
+                View Details
+              </button>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </section>
+</ng-container>
+
+<ng-template #loadingTpl>
+  <div class="loading-state">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  </div>
+</ng-template>
+
+<!-- Footer - Only in public view -->
+<app-public-footer *ngIf="isPublicView"></app-public-footer>

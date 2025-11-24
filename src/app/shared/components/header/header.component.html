@@ -1,0 +1,26 @@
+<header class="top-bar">
+  <button mat-icon-button class="menu-btn" (click)="toggleSidebar.emit()">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <div class="spacer"></div>
+
+  <div class="actions">
+    <button mat-icon-button matTooltip="Settings" (click)="navigate('/dashboard/settings')">
+      <mat-icon>settings</mat-icon>
+    </button>
+    <button mat-icon-button matTooltip="Notifications">
+      <mat-icon>notifications_none</mat-icon>
+    </button>
+    <div class="user-badge">
+      <div class="avatar">{{ userName ? userName[0] : 'U' }}</div>
+      <div class="info">
+        <p>{{ userName }}</p>
+        <span>{{ role | titlecase }}</span>
+      </div>
+      <button mat-icon-button (click)="logout.emit()" matTooltip="Logout">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
+  </div>
+</header>

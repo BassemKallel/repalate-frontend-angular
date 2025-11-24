@@ -1,0 +1,156 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.signup-shell {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  min-height: 100vh;
+}
+
+.hero-pane {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.65)),
+    url('https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=1200&q=80')
+      center/cover no-repeat;
+  color: #fff;
+  padding: 3rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.logo-chip {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 10;
+  
+  .logo-image {
+    height: auto;
+    width: 180px;
+    max-width: 100%;
+    object-fit: contain;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+.hero-content {
+  max-width: 420px;
+  h1 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    margin-bottom: 1rem;
+  }
+  p {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.95);
+  }
+}
+
+.form-pane {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #faf7ef;
+  padding: 2rem;
+
+  mat-card {
+    width: min(640px, 100%);
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: 0 25px 40px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.card-header {
+  margin-bottom: 1rem;
+  h2 {
+    margin: 0;
+    font-size: 2rem;
+    color: #1f1f1f;
+  }
+  p {
+    margin: 0.25rem 0 0;
+    color: #777;
+  }
+}
+
+.role-toggle {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 1rem 0 1.5rem;
+
+  button {
+    border-radius: 999px;
+    text-transform: none;
+    padding-inline: 1.5rem;
+  }
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.grid.two {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.file-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  position: relative;
+
+  button {
+    justify-content: flex-start;
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    input[type='file'] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+  }
+
+  .file-hint {
+    color: #26a69a;
+    font-size: 0.9rem;
+  }
+}
+
+.flag-chip {
+  color: #ff3b3b;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  button:first-child {
+    min-width: 200px;
+    border-radius: 999px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-pane mat-card {
+    padding: 1.75rem;
+  }
+}
+

@@ -1,0 +1,165 @@
+<section class="stats">
+    <div class="section-header">
+        <div>
+            <h2>Statistics Dashboard</h2>
+            <p>Overview of your platform performance and key metrics</p>
+        </div>
+        <mat-button-toggle-group value="week">
+            <mat-button-toggle value="week">Week</mat-button-toggle>
+            <mat-button-toggle value="month">Month</mat-button-toggle>
+            <mat-button-toggle value="year">Year</mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="metrics-grid">
+        <mat-card class="metric-card">
+            <div class="metric-icon announcements">
+                <mat-icon>campaign</mat-icon>
+            </div>
+            <div class="metric-content">
+                <h3>156</h3>
+                <p>Total Announcements</p>
+                <span class="trend positive">+12% from last month</span>
+            </div>
+        </mat-card>
+
+        <mat-card class="metric-card">
+            <div class="metric-icon reservations">
+                <mat-icon>event_available</mat-icon>
+            </div>
+            <div class="metric-content">
+                <h3>193</h3>
+                <p>Total Reservations</p>
+                <span class="trend positive">+8% from last month</span>
+            </div>
+        </mat-card>
+
+        <mat-card class="metric-card">
+            <div class="metric-icon food-saved">
+                <mat-icon>eco</mat-icon>
+            </div>
+            <div class="metric-content">
+                <h3>2,450 kg</h3>
+                <p>Food Saved</p>
+                <span class="trend positive">+15% from last month</span>
+            </div>
+        </mat-card>
+
+        <mat-card class="metric-card">
+            <div class="metric-icon revenue">
+                <mat-icon>payments</mat-icon>
+            </div>
+            <div class="metric-content">
+                <h3>3,240 TND</h3>
+                <p>Total Revenue</p>
+                <span class="trend negative">-3% from last month</span>
+            </div>
+        </mat-card>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-grid">
+        <mat-card class="chart-card">
+            <h3>Announcements by Category</h3>
+            <div class="chart-placeholder">
+                <div class="category-stats">
+                    <div class="category-item">
+                        <div class="category-bar bakery" style="width: 85%"></div>
+                        <span>Bakery - 85%</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-bar fruits" style="width: 70%"></div>
+                        <span>Fruits & Vegetables - 70%</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-bar dairy" style="width: 60%"></div>
+                        <span>Dairy - 60%</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-bar meals" style="width: 45%"></div>
+                        <span>Prepared Meals - 45%</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-bar other" style="width: 30%"></div>
+                        <span>Other - 30%</span>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+
+        <mat-card class="chart-card">
+            <h3>Reservation Status</h3>
+            <div class="chart-placeholder">
+                <div class="status-grid">
+                    <div class="status-item">
+                        <div class="status-circle pending">45</div>
+                        <span>Pending</span>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-circle confirmed">78</div>
+                        <span>Confirmed</span>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-circle completed">128</div>
+                        <span>Completed</span>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-circle cancelled">12</div>
+                        <span>Cancelled</span>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+
+    <!-- Recent Activity -->
+    <mat-card class="activity-card">
+        <h3>Recent Activity</h3>
+        <div class="activity-list">
+            <div class="activity-item">
+                <div class="activity-icon new">
+                    <mat-icon>add_circle</mat-icon>
+                </div>
+                <div class="activity-content">
+                    <strong>New announcement created</strong>
+                    <p>Fresh Baguettes - 10 kg available</p>
+                    <small>2 hours ago</small>
+                </div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon reservation">
+                    <mat-icon>event_available</mat-icon>
+                </div>
+                <div class="activity-content">
+                    <strong>Reservation confirmed</strong>
+                    <p>Ahmed Ben Salem reserved 5 kg of Organic Vegetables</p>
+                    <small>4 hours ago</small>
+                </div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon completed">
+                    <mat-icon>check_circle</mat-icon>
+                </div>
+                <div class="activity-content">
+                    <strong>Pickup completed</strong>
+                    <p>Nour Association picked up 8 pieces of Prepared Meals</p>
+                    <small>6 hours ago</small>
+                </div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon cancelled">
+                    <mat-icon>cancel</mat-icon>
+                </div>
+                <div class="activity-content">
+                    <strong>Reservation cancelled</strong>
+                    <p>Mohamed Ali cancelled reservation for Dairy Products</p>
+                    <small>1 day ago</small>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+</section>
