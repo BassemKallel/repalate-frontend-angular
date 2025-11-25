@@ -8,7 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { Announcement } from '../../../shared/models/announcement';
 import { AnnouncementService } from '../../../services/announcement.service';
-import { AuthService } from '../../../auth/auth.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-announcements-list',

@@ -39,6 +39,7 @@ export class UsersListComponent implements OnInit {
     this.loading = true;
     this.userService.getAllUsers().subscribe({
       next: (users) => {
+        console.log('Users loaded:', users);
         const normalized: User[] = users.map((user) => ({
           ...user,
           fullName: user.fullName || (user as any).username || 'Unknown user',
@@ -93,10 +94,16 @@ export class UsersListComponent implements OnInit {
   }
 
   getStatusClass(status?: string): string {
-    switch (status) {
-      case 'Active':
+    const s = status?.toUpperCase();
+    switch (s) {
+      case 'ACTIVE':
         return 'status-active';
-      case 'Inactive':
+      case 'PENDING':
+        return 'status-pending';
+      case 'REJECTED':
+        return 'status-rejected';
+      case 'SUSPENDED':
+        return 'status-suspended';
       default:
         return 'status-inactive';
     }

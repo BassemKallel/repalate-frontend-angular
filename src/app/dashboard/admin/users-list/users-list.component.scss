@@ -213,17 +213,41 @@ mat-chip.role-unknown {
   font-weight: 600;
 }
 
-// Status Chips
-mat-chip.status-active {
-  background: linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(76, 175, 80, 0.08) 100%);
-  color: #388E3C;
+// Status Badges
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.85rem;
   font-weight: 600;
+  line-height: 1.2;
 }
 
-mat-chip.status-inactive {
-  background: linear-gradient(135deg, rgba(244, 67, 54, 0.15) 0%, rgba(244, 67, 54, 0.08) 100%);
-  color: #D32F2F;
-  font-weight: 600;
+.status-active {
+  background-color: #e6f4ea;
+  color: #137333;
+}
+
+.status-pending {
+  background-color: #fef7e0;
+  color: #b06000;
+}
+
+.status-rejected {
+  background-color: #fce8e6;
+  color: #c5221f;
+}
+
+.status-suspended {
+  background-color: #f1f3f4;
+  color: #5f6368;
+}
+
+.status-inactive {
+  background-color: #f1f3f4;
+  color: #5f6368;
 }
 
 // Stacked Content

@@ -18,8 +18,9 @@ export interface AuthRequest {
 export interface AuthResponse {
   id: number;
   email: string;
+  username: string;
   role: UserRole;
-  token: string;
+  jwtToken: string;
 }
 
 export interface MessageResponse {

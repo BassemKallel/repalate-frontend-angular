@@ -18,7 +18,31 @@
 
         <!-- Actions -->
         <div class="header-actions">
-            <a routerLink="/login" class="btn-signin">Sign In</a>
+            <ng-container *ngIf="!isAuthenticated; else userProfile">
+                <a routerLink="/login" class="btn-signin">Sign In</a>
+            </ng-container>
+
+            <ng-template #userProfile>
+                <div class="user-profile">
+                    <div class="user-info">
+                        <mat-icon>account_circle</mat-icon>
+                        <span class="user-name">{{ currentUser?.fullName || currentUser?.email }}</span>
+                    </div>
+                    <button mat-icon-button [matMenuTriggerFor]="userMenu">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #userMenu="matMenu">
+                        <button mat-menu-item (click)="goToDashboard()">
+                            <mat-icon>dashboard</mat-icon>
+                            <span>Dashboard</span>
+                        </button>
+                        <button mat-menu-item (click)="logout()">
+                            <mat-icon>logout</mat-icon>
+                            <span>Logout</span>
+                        </button>
+                    </mat-menu>
+                </div>
+            </ng-template>
         </div>
 
         <!-- Mobile Menu Button -->

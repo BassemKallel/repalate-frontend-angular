@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
-import { AuthService } from '../../../auth/auth.service';
+import { AuthService } from '../../../services/auth.service';
 import { AnnouncementService } from '../../../services/announcement.service';
 import { Announcement } from '../../../shared/models/announcement';
 import { ConfirmDialogComponent, ConfirmDialogData } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
@@ -111,6 +111,7 @@ export class AdminAnnouncementsComponent implements OnInit, AfterViewInit {
   }
 
   private mapToAdminAnnouncement(item: Announcement, index: number): AdminAnnouncement {
+    console.log(`Announcement ${item.id} full object:`, item);
     const numericId = typeof item.id === 'number' ? item.id : Number(item.id);
     const originalId = Number.isFinite(numericId) ? numericId : index + 1;
     return {

@@ -5,6 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Announcement } from '../../../shared/models/announcement';
 import { AnnouncementService } from '../../../services/announcement.service';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { AuthService } from '../../../services/auth.service';
+import { ReservationService } from '../../../services/reservation.service';
 
 interface RelatedOffer {
   id: string;
@@ -54,7 +56,9 @@ export class AnnouncementDetailsComponent implements OnInit {
     private router: Router,
     private announcementService: AnnouncementService,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private authService: AuthService,
+    private reservationService: ReservationService
   ) { }
 
   ngOnInit(): void {
@@ -68,13 +72,76 @@ export class AnnouncementDetailsComponent implements OnInit {
   }
 
   reserve(): void {
+    if (!this.authService.isAuthenticated()) {
+      this.snackBar.open('You must be logged in to make a reservation', 'Close', { duration: 3000 });
+      this.router.navigate(['/login']);
+      return;
+    }
+
     if (!this.announcement || this.reservationQuantity < 1 || this.reservationQuantity > this.announcement.stock) {
       this.snackBar.open('Invalid quantity', 'Close', { duration: 3000 });
       return;
     }
 
-    this.snackBar.open(`Reservation for ${this.reservationQuantity} ${this.announcement.unit} submitted!`, 'Close', {
-      duration: 3000
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Confirm Reservation',
+        message: `Are you sure you want to reserve ${this.reservationQuantity} ${this.announcement.unit}(s)?`,
+        confirmLabel: 'Confirm',
+        cancelLabel: 'Cancel'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.createReservation();
+      }
+    });
+  }
+
+  private createReservation(): void {
+    if (!this.announcement) {
+      console.error('Announcement is null');
+      return;
+    }
+
+    console.log('Creating reservation for:', {
+      announcementId: this.announcement.id,
+      quantity: this.reservationQuantity
+    });
+
+    const currentUser = this.authService.getCurrentUser();
+    if (!currentUser) {
+      console.error('User not logged in');
+      return;
+    }
+
+    const payload = {
+      annonceId: this.announcement.id,
+      userId: currentUser.id,
+      quantiteTransmise: this.reservationQuantity,
+      offerType: this.announcement.announcementType,
+      amount: this.announcement.price * this.reservationQuantity
+    };
+
+    console.log('Sending payload:', payload);
+
+    this.reservationService.create(payload).subscribe({
+      next: () => {
+        const snackBarRef = this.snackBar.open(
+          'Reservation submitted successfully!',
+          'Go to Dashboard',
+          { duration: 5000 }
+        );
+
+        snackBarRef.onAction().subscribe(() => {
+          this.router.navigate(['/dashboard/reservations']);
+        });
+      },
+      error: (error) => {
+        console.error('Reservation error:', error);
+        this.snackBar.open('Failed to create reservation. Please try again.', 'Close', { duration: 3000 });
+      }
     });
   }
 

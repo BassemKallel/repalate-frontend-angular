@@ -1,62 +1,100 @@
-import { Component } from '@angular/core';
-
-interface Reservation {
-  id: number;
-  announcement: string;
-  customer: string;
-  quantity: string;
-  pickupDate: string;
-  status: string;
-}
+import { Component, OnInit } from '@angular/core';
+import { Reservation, ReservationService, TransactionStatus } from '../../../services/reservation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-reservations',
   templateUrl: './reservations.component.html',
   styleUrl: './reservations.component.scss'
 })
-export class ReservationsComponent {
-  displayedColumns: string[] = ['id', 'announcement', 'customer', 'quantity', 'pickupDate', 'status', 'actions'];
+export class ReservationsComponent implements OnInit {
+  displayedColumns: string[] = ['id', 'announcement', 'date', 'price', 'status', 'actions'];
+  reservations: Reservation[] = [];
+  loading = true;
 
-  reservations: Reservation[] = [
-    {
-      id: 1,
-      announcement: 'Fresh Baguettes',
-      customer: 'Ahmed Ben Salem',
-      quantity: '5 kg',
-      pickupDate: '2025-11-24 10:00',
-      status: 'Pending'
-    },
-    {
-      id: 2,
-      announcement: 'Organic Vegetables',
-      customer: 'Nour Association',
-      quantity: '10 kg',
-      pickupDate: '2025-11-24 14:00',
-      status: 'Confirmed'
-    },
-    {
-      id: 3,
-      announcement: 'Dairy Products',
-      customer: 'Mohamed Ali',
-      quantity: '3 L',
-      pickupDate: '2025-11-23 16:00',
-      status: 'Completed'
-    },
-    {
-      id: 4,
-      announcement: 'Prepared Meals',
-      customer: 'Fatma Trabelsi',
-      quantity: '8 pieces',
-      pickupDate: '2025-11-25 12:00',
-      status: 'Pending'
-    },
-    {
-      id: 5,
-      announcement: 'Fresh Fruits',
-      customer: 'Karim Essid',
-      quantity: '7 kg',
-      pickupDate: '2025-11-22 09:00',
-      status: 'Cancelled'
+  constructor(
+    private reservationService: ReservationService,
+    public authService: AuthService
+  ) { }
+
+  ngOnInit(): void {
+    this.loadReservations();
+  }
+
+  get isIndividual(): boolean {
+    return this.authService.getRole() === 'INDIVIDUAL';
+  }
+
+  loadReservations(): void {
+    this.loading = true;
+    const request$ = this.authService.getRole() === 'ADMIN'
+      ? this.reservationService.getAdminHistory()
+      : this.reservationService.getMyHistory();
+
+    request$.subscribe({
+      next: (data) => {
+        this.reservations = data;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading reservations:', error);
+        this.loading = false;
+      }
+    });
+  }
+
+  getStatusClass(status: TransactionStatus): string {
+    switch (status) {
+      case TransactionStatus.COMPLETED: return 'status-completed';
+      case TransactionStatus.PENDING:
+      case TransactionStatus.PENDING_CONFIRMATION: return 'status-pending';
+      case TransactionStatus.CANCELLED: return 'status-cancelled';
+      default: return '';
     }
-  ];
+  }
+
+  onAccept(reservation: Reservation): void {
+    if (confirm('Are you sure you want to accept this reservation?')) {
+      this.reservationService.accept(reservation.transactionId).subscribe({
+        next: () => {
+          this.loadReservations();
+        },
+        error: (err) => console.error('Error accepting reservation:', err)
+      });
+    }
+  }
+
+  onRefuse(reservation: Reservation): void {
+    if (confirm('Are you sure you want to refuse this reservation?')) {
+      this.reservationService.refuse(reservation.transactionId).subscribe({
+        next: () => {
+          this.loadReservations();
+        },
+        error: (err) => console.error('Error refusing reservation:', err)
+      });
+    }
+  }
+
+  onPay(reservation: Reservation): void {
+    // Implement payment logic here, possibly redirecting to a payment page or opening a dialog
+
+    this.reservationService.pay(reservation.transactionId).subscribe({
+      next: () => {
+        alert('Payment successful!');
+        this.loadReservations();
+      },
+      error: (err) => console.error('Error processing payment:', err)
+    });
+  }
+
+  onCancel(reservation: Reservation): void {
+    if (confirm('Are you sure you want to cancel this reservation?')) {
+      this.reservationService.cancel(reservation.transactionId).subscribe({
+        next: () => {
+          this.loadReservations();
+        },
+        error: (err) => console.error('Error cancelling reservation:', err)
+      });
+    }
+  }
 }

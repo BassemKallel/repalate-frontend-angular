@@ -546,6 +546,201 @@
           box-shadow: 0 6px 16px rgba(240, 191, 76, 0.4);
         }
       }
+
+      &.badge-donation {
+        background: rgba(76, 175, 80, 0.95);
+        color: white;
+      }
+
+      &.badge-sale {
+        background: rgba(240, 191, 76, 0.95);
+        color: white;
+      }
+    }
+
+    .card-image {
+      height: 220px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-size: cover;
+      background-position: center;
+
+      .image-overlay {
+        background: rgba(0, 0, 0, 0.15);
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &.with-image {
+          background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+        }
+
+        .category-icon {
+          font-size: 72px;
+          width: 72px;
+          height: 72px;
+          color: white;
+          opacity: 0.9;
+          filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+      }
+
+      .expiry-badge {
+        position: absolute;
+        bottom: 12px;
+        left: 12px;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.4rem 0.9rem;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #D0A03C;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+        mat-icon {
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
+        }
+      }
+    }
+
+    .card-content {
+      padding: 1.5rem;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1rem;
+
+      h3 {
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        flex: 1;
+        line-height: 1.3;
+      }
+
+      .category-chip {
+        background: #FFF8E1;
+        color: #D0A03C;
+        font-size: 0.7rem;
+        font-weight: 700;
+        height: 26px;
+        min-height: 26px;
+        padding: 0 0.75rem;
+      }
+    }
+
+    .description {
+      margin: 0 0 1.25rem;
+      color: #666;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-meta {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: #FAFAFA;
+      border-radius: 12px;
+      border-left: 4px solid #F0BF4C;
+
+      .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+          color: #F0BF4C;
+        }
+
+        &.stock {
+          .value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a1a1a;
+          }
+
+          .unit {
+            color: #666;
+            font-size: 0.9rem;
+          }
+        }
+
+        &.location {
+          color: #666;
+          font-size: 0.9rem;
+        }
+      }
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #f0f0f0;
+
+      .price-info,
+      .donation-info {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+
+        mat-icon {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
+      }
+
+      .donation-info {
+        color: #4CAF50;
+      }
+
+      .price-info {
+        color: #F0BF4C;
+      }
+
+      .view-btn {
+        border-radius: 8px;
+        background: linear-gradient(135deg, #F0BF4C 0%, #E0AF3C 100%);
+        box-shadow: 0 4px 12px rgba(240, 191, 76, 0.3);
+        font-weight: 600;
+
+        mat-icon {
+          margin-right: 0.5rem;
+        }
+
+        &:hover {
+          box-shadow: 0 6px 16px rgba(240, 191, 76, 0.4);
+        }
+      }
     }
   }
 }
@@ -556,4 +751,69 @@
   align-items: center;
   justify-content: center;
   min-height: 500px;
+}
+
+// Breadcrumb Styles
+.breadcrumb-container {
+  padding: 1rem 2rem;
+  background-color: #f8f9fa;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #e9ecef;
+
+  .breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    max-width: 1400px;
+    margin: 0 auto;
+    
+    .breadcrumb-item {
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      color: #6c757d;
+
+      + .breadcrumb-item {
+        padding-left: 0.5rem;
+        
+        &::before {
+          display: inline-block;
+          padding-right: 0.5rem;
+          color: #6c757d;
+          content: "/";
+        }
+      }
+
+      a {
+        color: #0d6efd;
+        text-decoration: none;
+        transition: color 0.2s;
+        
+        &:hover {
+          text-decoration: underline;
+          color: #0a58ca;
+        }
+      }
+
+      &.active {
+        color: #6c757d;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+// Adjust for public view if needed
+:host-context(.public-view) {
+  .breadcrumb-container {
+    padding: 1rem;
+    background: transparent;
+    border-bottom: none;
+    
+    .breadcrumb {
+      padding: 0 1rem;
+    }
+  }
 }

@@ -61,33 +61,28 @@
         <table mat-table [dataSource]="reservations" class="reservations-table">
             <ng-container matColumnDef="id">
                 <th mat-header-cell *matHeaderCellDef>ID</th>
-                <td mat-cell *matCellDef="let reservation">#{{ reservation.id }}</td>
+                <td mat-cell *matCellDef="let reservation">#{{ reservation.transactionId }}</td>
             </ng-container>
 
             <ng-container matColumnDef="announcement">
                 <th mat-header-cell *matHeaderCellDef>Announcement</th>
-                <td mat-cell *matCellDef="let reservation">{{ reservation.announcement }}</td>
+                <td mat-cell *matCellDef="let reservation">{{ reservation.announcementTitle }}</td>
             </ng-container>
 
-            <ng-container matColumnDef="customer">
-                <th mat-header-cell *matHeaderCellDef>Customer</th>
-                <td mat-cell *matCellDef="let reservation">{{ reservation.customer }}</td>
+            <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef>Date</th>
+                <td mat-cell *matCellDef="let reservation">{{ reservation.transactionDate | date:'medium' }}</td>
             </ng-container>
 
-            <ng-container matColumnDef="quantity">
-                <th mat-header-cell *matHeaderCellDef>Quantity</th>
-                <td mat-cell *matCellDef="let reservation">{{ reservation.quantity }}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="pickupDate">
-                <th mat-header-cell *matHeaderCellDef>Pickup Date</th>
-                <td mat-cell *matCellDef="let reservation">{{ reservation.pickupDate }}</td>
+            <ng-container matColumnDef="price">
+                <th mat-header-cell *matHeaderCellDef>Price</th>
+                <td mat-cell *matCellDef="let reservation">{{ reservation.price | currency }}</td>
             </ng-container>
 
             <ng-container matColumnDef="status">
                 <th mat-header-cell *matHeaderCellDef>Status</th>
                 <td mat-cell *matCellDef="let reservation">
-                    <mat-chip [class]="'status-' + reservation.status.toLowerCase()">
+                    <mat-chip [class]="getStatusClass(reservation.status)">
                         {{ reservation.status }}
                     </mat-chip>
                 </td>
@@ -96,23 +91,30 @@
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef>Actions</th>
                 <td mat-cell *matCellDef="let reservation">
-                    <button mat-icon-button [matMenuTriggerFor]="menu">
-                        <mat-icon>more_vert</mat-icon>
-                    </button>
-                    <mat-menu #menu="matMenu">
-                        <button mat-menu-item>
-                            <mat-icon>visibility</mat-icon>
-                            <span>View Details</span>
+                    <!-- Actions for Merchant/Association (Accept/Refuse) -->
+                    <div class="actions-row" *ngIf="!isIndividual && reservation.status === 'PENDING_CONFIRMATION'">
+                        <button mat-icon-button color="primary" (click)="onAccept(reservation)" matTooltip="Accept">
+                            <mat-icon>check_circle</mat-icon>
                         </button>
-                        <button mat-menu-item>
-                            <mat-icon>check</mat-icon>
-                            <span>Confirm</span>
+                        <button mat-icon-button color="warn" (click)="onRefuse(reservation)" matTooltip="Refuse">
+                            <mat-icon>delete</mat-icon>
                         </button>
-                        <button mat-menu-item>
+                    </div>
+
+                    <!-- Actions for INDIVIDUAL (Pay/Cancel) -->
+                    <div class="actions-row" *ngIf="isIndividual">
+                        <!-- Pay button: Only when status is PENDING (confirmed by merchant) -->
+                        <button mat-raised-button color="primary" (click)="onPay(reservation)" class="btn-pay"
+                            *ngIf="reservation.status === 'PENDING'" style="margin-right: 8px;">
+                            Pay
+                        </button>
+
+                        <!-- Cancel button: When PENDING (confirmed) or PENDING_CONFIRMATION (waiting) -->
+                        <button mat-icon-button color="warn" (click)="onCancel(reservation)" matTooltip="Cancel"
+                            *ngIf="reservation.status === 'PENDING' || reservation.status === 'PENDING_CONFIRMATION'">
                             <mat-icon>cancel</mat-icon>
-                            <span>Cancel</span>
                         </button>
-                    </mat-menu>
+                    </div>
                 </td>
             </ng-container>
 

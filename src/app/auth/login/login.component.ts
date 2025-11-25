@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -38,13 +38,16 @@ export class LoginComponent {
         this.snackBar.open('Welcome back to Replate!', 'Close', { duration: 3000 });
         const role = this.authService.getRole();
         console.log('User role:', role);
-        
+
         if (role === 'ADMIN') {
           console.log('Redirecting to admin dashboard');
           this.router.navigate(['/dashboard/admin/users']);
-        } else {
+        } else if (role === 'MERCHANT') {
           console.log('Redirecting to announcements dashboard');
           this.router.navigate(['/dashboard/announcements']);
+        } else {
+          console.log('Redirecting to browse page');
+          this.router.navigate(['/browse']);
         }
       },
       error: () => {

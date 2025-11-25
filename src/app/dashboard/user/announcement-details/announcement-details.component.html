@@ -1,4 +1,24 @@
 <app-public-header *ngIf="isPublicView"></app-public-header>
+
+<div class="breadcrumb-container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+
+      <ng-container *ngIf="isPublicView">
+        <li class="breadcrumb-item"><a routerLink="/announcements">Public Announcements</a></li>
+      </ng-container>
+
+      <ng-container *ngIf="!isPublicView">
+        <li class="breadcrumb-item"><a routerLink="/dashboard">Dashboard</a></li>
+        <li class="breadcrumb-item"><a routerLink="/dashboard/announcements">Announcements</a></li>
+      </ng-container>
+
+      <li class="breadcrumb-item active" aria-current="page" *ngIf="announcement">{{ announcement.title }}</li>
+    </ol>
+  </nav>
+</div>
+
 <ng-container *ngIf="!loading && announcement; else loadingTpl">
   <section class="details" [class.public-view]="isPublicView">
     <!-- Page Header - Only show in dashboard view -->

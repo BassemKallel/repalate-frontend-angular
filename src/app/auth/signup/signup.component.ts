@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../services/auth.service';
 import { FileService } from '../../services/file.service';
 
 @Component({
@@ -80,7 +80,7 @@ export class SignupComponent {
 
     const payload = { ...this.signupForm.value };
     delete payload.confirmPassword;
-    
+
     this.isSubmitting = true;
 
     this.authService.register(payload).subscribe({
@@ -89,7 +89,7 @@ export class SignupComponent {
         this.snackBar.open('Account created! Please login.', 'Close', { duration: 3500 });
         this.router.navigate(['/login']);
       },
-      error: (error) => {
+      error: (error: any) => {
         this.isSubmitting = false;
         if (error.status === 409) {
           this.snackBar.open('User already exists. Please login.', 'Close', { duration: 4000 });

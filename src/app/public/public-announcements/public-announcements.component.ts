@@ -56,12 +56,16 @@ export class PublicAnnouncementsComponent implements OnInit {
     this.loading = true;
     this.announcementService.getAll().subscribe({
       next: (announcements) => {
-        // Filter only accepted announcements
-        this.announcements = announcements.filter(a => a.moderationStatus === 'ACCEPTED');
+        console.log('API Response:', announcements);
+        console.log('Statuses:', announcements.map(a => a.moderationStatus));
+        // this.announcements = announcements.filter(a => a.moderationStatus === 'ACCEPTED');
+        this.announcements = announcements;
+        console.log('Filtered Announcements:', this.announcements);
         this.applyFilters();
         this.loading = false;
       },
-      error: () => {
+      error: (err) => {
+        console.error('API Error:', err);
         this.loading = false;
       }
     });

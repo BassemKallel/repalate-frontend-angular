@@ -1,6 +1,10 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { PaymentService, Transaction } from '../../../services/payment.service';
+import { forkJoin } from 'rxjs';
+import { ReservationService } from '../../../services/reservation.service';
+import { UserService } from '../../../services/user.service';
 
 interface AdminTransaction {
   ref: string;
@@ -14,24 +18,66 @@ interface AdminTransaction {
   templateUrl: './admin-transactions.component.html',
   styleUrls: ['./admin-transactions.component.scss']
 })
-export class AdminTransactionsComponent implements AfterViewInit {
-  transactions: AdminTransaction[] = [
-    { ref: 'TRX-1023', applicant: 'Marché Central', association: 'AidAction', status: 'En cours' },
-    { ref: 'TRX-1022', applicant: 'BioFarm', association: 'Entraide 92', status: 'Terminée' },
-    { ref: 'TRX-1019', applicant: 'Coop Soleil', association: 'Solidarité Lyon', status: 'Annulée' }
-  ];
+export class AdminTransactionsComponent implements AfterViewInit, OnInit {
+  transactions: AdminTransaction[] = [];
 
   displayedColumns: string[] = ['ref', 'applicant', 'association', 'status', 'actions'];
-  dataSource = new MatTableDataSource<AdminTransaction>(this.transactions);
+  dataSource = new MatTableDataSource<AdminTransaction>([]);
   filterText = '';
   statusFilter: 'all' | AdminTransaction['status'] = 'all';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  constructor(
+    private paymentService: PaymentService,
+    private reservationService: ReservationService,
+    private userService: UserService
+  ) { }
+
+  ngOnInit(): void {
+    this.loadTransactions();
+  }
+
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.configureFilter();
-    this.applyFilters();
+  }
+
+  loadTransactions(): void {
+    forkJoin({
+      payments: this.paymentService.getAllPayments(),
+      reservations: this.reservationService.getAdminHistory(),
+      users: this.userService.getAllUsers()
+    }).subscribe({
+      next: ({ payments, reservations, users }) => {
+        console.log('Data loaded:', { payments, reservations, users });
+
+        this.transactions = payments.map(payment => {
+          const reservation = reservations.find(r => r.transactionId === payment.transactionId);
+          const user = users.find(u => u.id === reservation?.userId);
+
+          return {
+            ref: payment.providerPaymentId || `PAY-${payment.paymentId}`,
+            applicant: user ? user.fullName : `User ${reservation?.userId || 'Unknown'}`,
+            association: reservation?.announcementTitle || 'N/A',
+            status: this.mapStatus(payment.status)
+          };
+        });
+
+        this.dataSource.data = this.transactions;
+        this.applyFilters();
+      },
+      error: (err) => console.error('Error loading data:', err)
+    });
+  }
+
+  mapStatus(status: string): 'En cours' | 'Terminée' | 'Annulée' {
+    switch (status?.toUpperCase()) {
+      case 'COMPLETED': return 'Terminée';
+      case 'PENDING': return 'En cours';
+      case 'CANCELLED': return 'Annulée';
+      default: return 'En cours';
+    }
   }
 
   getTotalCount(): number {

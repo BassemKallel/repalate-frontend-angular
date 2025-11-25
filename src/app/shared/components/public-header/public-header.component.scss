@@ -108,6 +108,24 @@
                 box-shadow: 0 4px 12px rgba(240, 191, 76, 0.3);
             }
         }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+
+            .user-info {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                color: #1a1a1a;
+                font-weight: 500;
+
+                mat-icon {
+                    color: #F0BF4C;
+                }
+            }
+        }
     }
 
     // Mobile Menu Button
