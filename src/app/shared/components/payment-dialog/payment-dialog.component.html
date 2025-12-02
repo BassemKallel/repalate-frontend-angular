@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>Paiement de la réservation</h2>
+
+<mat-dialog-content>
+    <div class="payment-details">
+        <div class="detail-row">
+            <span class="label">Annonce:</span>
+            <span class="value">{{ data.announcementTitle }}</span>
+        </div>
+        <div class="detail-row">
+            <span class="label">Montant:</span>
+            <span class="value price">{{ data.price | currency:'EUR' }}</span>
+        </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="payment-form">
+        <label for="card-element">Informations de carte bancaire</label>
+        <div id="card-element" class="stripe-card-element"></div>
+
+        <div class="error-message" *ngIf="errorMessage">
+            <mat-icon>error</mat-icon>
+            <span>{{ errorMessage }}</span>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()" [disabled]="processing">
+        Annuler
+    </button>
+    <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="processing">
+        <mat-spinner *ngIf="processing" diameter="20" style="display: inline-block; margin-right: 8px;"></mat-spinner>
+        {{ processing ? 'Traitement...' : 'Payer ' + (data.price | currency:'EUR') }}
+    </button>
+</mat-dialog-actions>

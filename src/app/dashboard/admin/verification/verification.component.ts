@@ -61,7 +61,7 @@ export class VerificationComponent implements OnInit {
   approve(user: User): void {
     this.confirm({
       title: 'Approve account',
-      message: `Approve ${user.fullName}?`,
+      message: `Approve ${user.username}?`,
       confirmLabel: 'Approve'
     }).then((confirmed) => {
       if (!confirmed) {
@@ -69,7 +69,7 @@ export class VerificationComponent implements OnInit {
       }
       this.userService.validateUser(user.id).subscribe({
         next: () => {
-          this.snackBar.open(`${user.fullName} has been approved`, 'Close', { duration: 2500 });
+          this.snackBar.open(`${user.username} has been approved`, 'Close', { duration: 2500 });
           this.loadPendingAccounts();
         },
         error: () => this.snackBar.open('Unable to approve user.', 'Close', { duration: 3000 })
@@ -80,15 +80,15 @@ export class VerificationComponent implements OnInit {
   reject(user: User): void {
     this.confirm({
       title: 'Reject account',
-      message: `Reject ${user.fullName}?`,
+      message: `Reject ${user.username}?`,
       confirmLabel: 'Reject'
     }).then((confirmed) => {
       if (!confirmed) {
         return;
       }
-      this.userService.deleteUser(user.id).subscribe({
+      this.userService.rejectUser(user.id).subscribe({
         next: () => {
-          this.snackBar.open(`${user.fullName} has been rejected`, 'Close', { duration: 2500 });
+          this.snackBar.open(`${user.username} has been rejected`, 'Close', { duration: 2500 });
           this.loadPendingAccounts();
         },
         error: () => this.snackBar.open('Unable to reject user.', 'Close', { duration: 3000 })

@@ -2,6 +2,12 @@
     display: block;
 }
 
+.reservations {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
 .section-header {
     display: flex;
     justify-content: space-between;
@@ -12,6 +18,7 @@
         margin: 0 0 0.5rem;
         font-size: 2rem;
         font-weight: 600;
+        color: #1a1a1a;
     }
 
     p {
@@ -33,6 +40,13 @@
     gap: 1rem;
     padding: 1.5rem;
     border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
 
     .stat-icon {
         width: 56px;
@@ -84,22 +98,41 @@
 
 .table-card {
     border-radius: 12px;
-    padding: 1.5rem;
+    padding: 0;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 
     .table-header {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1.5rem;
+        flex-direction: column;
+        gap: 16px;
+        padding: 1.5rem;
+        border-bottom: 1px solid #eee;
 
         h3 {
             margin: 0;
+            color: #1a1a1a;
             font-size: 1.25rem;
             font-weight: 600;
         }
 
-        .search-field {
-            width: 300px;
+        .filters-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+
+            .search-field {
+                flex: 1;
+                min-width: 200px;
+            }
+
+            .filter-field {
+                min-width: 150px;
+            }
+
+            mat-form-field {
+                margin-bottom: -1.25em;
+            }
         }
     }
 }
@@ -112,17 +145,31 @@
         color: #666;
         text-transform: uppercase;
         font-size: 0.85rem;
+        padding: 1rem 0.75rem;
     }
 
     td {
-        padding: 1rem 0.5rem;
+        padding: 1rem 0.75rem;
+        color: #333;
+    }
+
+    tr {
+        transition: background-color 0.2s ease;
+
+        &:hover {
+            background-color: #f9f9f9;
+        }
     }
 
     mat-chip {
         font-size: 0.85rem;
         font-weight: 600;
+        border-radius: 12px;
+        padding: 0.25rem 0.75rem;
 
-        &.status-pending {
+        &.status-pending,
+        &.status-pending-confirmation,
+        &.status-pending-payment {
             background: #fff3e0;
             color: #ff9800;
         }
@@ -132,14 +179,110 @@
             color: #4caf50;
         }
 
-        &.status-completed {
+        &.status-completed,
+        &.status-delivered {
             background: #e3f2fd;
             color: #2196f3;
         }
 
-        &.status-cancelled {
+        &.status-cancelled,
+        &.status-refused {
             background: #ffebee;
             color: #f44336;
+        }
+    }
+}
+
+.actions-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-start;
+
+    button {
+        &.btn-pay {
+            min-width: 100px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+    }
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+
+    mat-icon {
+        font-size: 80px;
+        width: 80px;
+        height: 80px;
+        color: #e0e0e0;
+        margin-bottom: 1rem;
+    }
+
+    h3 {
+        margin: 0 0 0.5rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #666;
+    }
+
+    p {
+        margin: 0 0 1.5rem;
+        color: #999;
+        font-size: 0.95rem;
+    }
+
+    button {
+        border-radius: 8px;
+        font-weight: 600;
+
+        mat-icon {
+            margin-right: 0.5rem;
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
+    }
+}
+
+// Responsive
+@media (max-width: 768px) {
+    .reservations {
+        padding: 1rem;
+    }
+
+    .section-header {
+        h2 {
+            font-size: 1.5rem;
+        }
+    }
+
+    .stats-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .table-header {
+        .filters-container {
+            flex-direction: column;
+            align-items: stretch;
+
+            .search-field,
+            .filter-field {
+                width: 100%;
+            }
+        }
+    }
+
+    .reservations-table {
+        display: block;
+        overflow-x: auto;
+
+        th,
+        td {
+            padding: 0.75rem 0.5rem;
+            font-size: 0.875rem;
         }
     }
 }

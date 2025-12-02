@@ -26,7 +26,7 @@
                 <div class="user-profile">
                     <div class="user-info">
                         <mat-icon>account_circle</mat-icon>
-                        <span class="user-name">{{ currentUser?.fullName || currentUser?.email }}</span>
+                        <span class="user-name">{{ currentUser?.username || currentUser?.email }}</span>
                     </div>
                     <button mat-icon-button [matMenuTriggerFor]="userMenu">
                         <mat-icon>more_vert</mat-icon>

@@ -469,6 +469,37 @@
                 height: 16px;
             }
         }
+
+        .favorite-btn {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            z-index: 11;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+            mat-icon {
+                color: #999;
+                transition: all 0.3s ease;
+
+                &.favorited {
+                    color: #e91e63;
+                    animation: heartBeat 0.3s ease;
+                }
+            }
+
+            &:hover {
+                background: white;
+                transform: scale(1.1);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+                mat-icon:not(.favorited) {
+                    color: #e91e63;
+                }
+            }
+        }
     }
 
     .card-content {
@@ -685,5 +716,28 @@ mat-paginator {
     .announcements-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
+    }
+}
+
+// Animations
+@keyframes heartBeat {
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.3);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    75% {
+        transform: scale(1.25);
+    }
+
+    100% {
+        transform: scale(1);
     }
 }

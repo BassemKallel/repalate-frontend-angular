@@ -28,7 +28,7 @@ export interface MessageResponse {
 }
 
 export interface ProfileUpdateRequest {
-  fullName?: string;
+  username?: string;
   organizationName?: string;
   phoneNumber?: string;
   location?: string;

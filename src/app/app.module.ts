@@ -58,6 +58,7 @@ import { PublicAnnouncementsComponent } from './public/public-announcements/publ
 import { PublicHeaderComponent } from './shared/components/public-header/public-header.component';
 import { PublicFooterComponent } from './shared/components/public-footer/public-footer.component';
 import { HomeComponent } from './public/home/home.component';
+import { PaymentDialogComponent } from './shared/components/payment-dialog/payment-dialog.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +87,8 @@ import { HomeComponent } from './public/home/home.component';
     PublicAnnouncementsComponent,
     HomeComponent,
     PublicHeaderComponent,
-    PublicFooterComponent
+    PublicFooterComponent,
+    PaymentDialogComponent
   ],
   imports: [
     BrowserModule,

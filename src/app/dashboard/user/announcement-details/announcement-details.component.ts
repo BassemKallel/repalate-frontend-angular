@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { Announcement } from '../../../shared/models/announcement';
 import { AnnouncementService } from '../../../services/announcement.service';
+import { FavoriteService } from '../../../services/favorite.service';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { AuthService } from '../../../services/auth.service';
 import { ReservationService } from '../../../services/reservation.service';
@@ -51,10 +52,15 @@ export class AnnouncementDetailsComponent implements OnInit {
     'OTHER'
   ];
 
+  // Favorites
+  isAnnouncementFavorited = false;
+  isMerchantFavorited = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private announcementService: AnnouncementService,
+    private favoriteService: FavoriteService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private authService: AuthService,
@@ -152,6 +158,11 @@ export class AnnouncementDetailsComponent implements OnInit {
         this.announcement = announcement;
         this.loading = false;
 
+        // Load favorite status if authenticated and in public view
+        if (this.isPublicView && this.authService.isAuthenticated()) {
+          this.loadFavoriteStatus();
+        }
+
         // Load similar announcements if in public view
         if (this.isPublicView && announcement.category) {
           this.loadSimilarAnnouncements(announcement.category, id);
@@ -160,6 +171,32 @@ export class AnnouncementDetailsComponent implements OnInit {
       error: () => {
         this.loading = false;
         this.snackBar.open('Announcement not found', 'Close', { duration: 3000 });
+      }
+    });
+  }
+
+  loadFavoriteStatus(): void {
+    if (!this.announcement) {
+      return;
+    }
+
+    // Check if announcement is favorited
+    this.favoriteService.isAnnouncementFavorited(this.announcement.id).subscribe({
+      next: (isFavorited) => {
+        this.isAnnouncementFavorited = isFavorited;
+      },
+      error: (err) => {
+        console.error('Error checking announcement favorite status:', err);
+      }
+    });
+
+    // Check if merchant is favorited
+    this.favoriteService.isMerchantFavorited(this.announcement.merchantId).subscribe({
+      next: (isFavorited) => {
+        this.isMerchantFavorited = isFavorited;
+      },
+      error: (err) => {
+        console.error('Error checking merchant favorite status:', err);
       }
     });
   }
@@ -281,5 +318,156 @@ export class AnnouncementDetailsComponent implements OnInit {
       this.router.navigate(['/dashboard/announcements', id]);
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  toggleAnnouncementFavorite(event: Event): void {
+    event.stopPropagation();
+
+    if (!this.announcement) {
+      return;
+    }
+
+    // Check if user is authenticated
+    if (!this.authService.isAuthenticated()) {
+      this.snackBar.open('Please log in to add favorites', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
+      return;
+    }
+
+    // Check if user has the right role
+    const userRole = this.authService.getRole();
+    if (userRole !== 'INDIVIDUAL' && userRole !== 'ASSOCIATION') {
+      this.snackBar.open('Only individuals and associations can add favorites', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
+      return;
+    }
+
+    if (this.isAnnouncementFavorited) {
+      // Remove from favorites
+      this.favoriteService.removeAnnouncementFavorite(this.announcement.id).subscribe({
+        next: () => {
+          this.isAnnouncementFavorited = false;
+          this.snackBar.open('Removed from favorites', 'Close', {
+            duration: 2000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom'
+          });
+        },
+        error: (err) => {
+          console.error('Error removing favorite:', err);
+          this.snackBar.open('Failed to remove from favorites', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
+        }
+      });
+    } else {
+      // Add to favorites
+      this.favoriteService.addAnnouncementFavorite(this.announcement.id).subscribe({
+        next: () => {
+          this.isAnnouncementFavorited = true;
+          this.snackBar.open('Added to favorites', 'Close', {
+            duration: 2000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom'
+          });
+        },
+        error: (err) => {
+          console.error('Error adding favorite:', err);
+          this.snackBar.open('Failed to add to favorites', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
+        }
+      });
+    }
+  }
+
+  toggleMerchantFavorite(event: Event): void {
+    event.stopPropagation();
+
+    if (!this.announcement) {
+      return;
+    }
+
+    // Check if user is authenticated
+    if (!this.authService.isAuthenticated()) {
+      this.snackBar.open('Please log in to add favorites', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
+      return;
+    }
+
+    // Check if user has the right role
+    const userRole = this.authService.getRole();
+    if (userRole !== 'INDIVIDUAL' && userRole !== 'ASSOCIATION') {
+      this.snackBar.open('Only individuals and associations can add favorites', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
+      return;
+    }
+
+    if (this.isMerchantFavorited) {
+      // Remove from favorites
+      this.favoriteService.removeMerchantFavorite(this.announcement.merchantId).subscribe({
+        next: () => {
+          this.isMerchantFavorited = false;
+          this.snackBar.open('Merchant removed from favorites', 'Close', {
+            duration: 2000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom'
+          });
+        },
+        error: (err) => {
+          console.error('Error removing merchant favorite:', err);
+          this.snackBar.open('Failed to remove merchant from favorites', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
+        }
+      });
+    } else {
+      // Add to favorites
+      this.favoriteService.addMerchantFavorite(this.announcement.merchantId).subscribe({
+        next: () => {
+          this.isMerchantFavorited = true;
+          this.snackBar.open('Merchant added to favorites', 'Close', {
+            duration: 2000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom'
+          });
+        },
+        error: (err) => {
+          console.error('Error adding merchant favorite:', err);
+          this.snackBar.open('Failed to add merchant to favorites', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
+        }
+      });
+    }
+  }
+
+  isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
+  canFavorite(): boolean {
+    const userRole = this.authService.getRole();
+    return this.isAuthenticated() && (userRole === 'INDIVIDUAL' || userRole === 'ASSOCIATION');
   }
 }

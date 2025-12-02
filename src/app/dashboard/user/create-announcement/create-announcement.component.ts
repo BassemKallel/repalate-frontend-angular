@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -129,9 +130,10 @@ export class CreateAnnouncementComponent implements OnInit {
           this.snackBar.open('Announcement updated successfully!', 'Close', { duration: 3000 });
           this.router.navigate(['/dashboard/announcements']);
         },
-        error: () => {
+        error: (err: HttpErrorResponse) => {
           this.isSubmitting = false;
-          this.snackBar.open('Unable to update announcement', 'Close', { duration: 3000 });
+          const errorMessage = err.error?.message || (typeof err.error === 'string' ? err.error : 'Unable to update announcement');
+          this.snackBar.open(errorMessage, 'Close', { duration: 3000 });
         }
       });
     } else {
@@ -141,9 +143,10 @@ export class CreateAnnouncementComponent implements OnInit {
           this.snackBar.open('Announcement created successfully!', 'Close', { duration: 3000 });
           this.router.navigate(['/dashboard/announcements']);
         },
-        error: () => {
+        error: (err: HttpErrorResponse) => {
           this.isSubmitting = false;
-          this.snackBar.open('Unable to create announcement', 'Close', { duration: 3000 });
+          const errorMessage = err.error?.message || (typeof err.error === 'string' ? err.error : 'Unable to create announcement');
+          this.snackBar.open(errorMessage, 'Close', { duration: 3000 });
         }
       });
     }

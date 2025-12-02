@@ -1,7 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AnnouncementService } from '../../services/announcement.service';
+import { FavoriteService } from '../../services/favorite.service';
+import { AuthService } from '../../services/auth.service';
 import { Announcement } from '../../shared/models/announcement';
 
 interface Category {
@@ -41,15 +44,22 @@ export class PublicAnnouncementsComponent implements OnInit {
   pageIndex = 0;
   totalItems = 0;
 
+  // Favorites
+  favoriteAnnouncementIds = new Set<number>();
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     private announcementService: AnnouncementService,
+    private favoriteService: FavoriteService,
+    private authService: AuthService,
+    private snackBar: MatSnackBar,
     private router: Router
   ) { }
 
   ngOnInit(): void {
     this.loadAnnouncements();
+    this.loadFavorites();
   }
 
   loadAnnouncements(): void {
@@ -60,6 +70,7 @@ export class PublicAnnouncementsComponent implements OnInit {
         console.log('Statuses:', announcements.map(a => a.moderationStatus));
         // this.announcements = announcements.filter(a => a.moderationStatus === 'ACCEPTED');
         this.announcements = announcements;
+        this.updateAnnouncementsFavoriteStatus();
         console.log('Filtered Announcements:', this.announcements);
         this.applyFilters();
         this.loading = false;
@@ -68,6 +79,30 @@ export class PublicAnnouncementsComponent implements OnInit {
         console.error('API Error:', err);
         this.loading = false;
       }
+    });
+  }
+
+  loadFavorites(): void {
+    if (!this.authService.isAuthenticated()) {
+      return;
+    }
+
+    this.favoriteService.getMyFavorites().subscribe({
+      next: (favorites) => {
+        this.favoriteAnnouncementIds = new Set(
+          favorites.announcements?.map(a => a.id) || []
+        );
+        this.updateAnnouncementsFavoriteStatus();
+      },
+      error: (err) => {
+        console.error('Error loading favorites:', err);
+      }
+    });
+  }
+
+  updateAnnouncementsFavoriteStatus(): void {
+    this.announcements.forEach(announcement => {
+      announcement.isFavorited = this.favoriteAnnouncementIds.has(announcement.id);
     });
   }
 
@@ -178,5 +213,80 @@ export class PublicAnnouncementsComponent implements OnInit {
 
   viewDetails(id: number): void {
     this.router.navigate(['/announcement', id]);
+  }
+
+  toggleAnnouncementFavorite(announcement: Announcement, event: Event): void {
+    event.stopPropagation();
+
+    // Check if user is authenticated
+    if (!this.authService.isAuthenticated()) {
+      this.snackBar.open('Please log in to add favorites', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
+      return;
+    }
+
+    // Check if user has the right role
+    const userRole = this.authService.getRole();
+    if (userRole !== 'INDIVIDUAL' && userRole !== 'ASSOCIATION') {
+      this.snackBar.open('Only individuals and associations can add favorites', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
+      return;
+    }
+
+    const isFavorited = announcement.isFavorited;
+
+    if (isFavorited) {
+      // Remove from favorites
+      this.favoriteService.removeAnnouncementFavorite(announcement.id).subscribe({
+        next: () => {
+          announcement.isFavorited = false;
+          this.favoriteAnnouncementIds.delete(announcement.id);
+          this.snackBar.open('Removed from favorites', 'Close', {
+            duration: 2000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom'
+          });
+        },
+        error: (err) => {
+          console.error('Error removing favorite:', err);
+          this.snackBar.open('Failed to remove from favorites', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
+        }
+      });
+    } else {
+      // Add to favorites
+      this.favoriteService.addAnnouncementFavorite(announcement.id).subscribe({
+        next: () => {
+          announcement.isFavorited = true;
+          this.favoriteAnnouncementIds.add(announcement.id);
+          this.snackBar.open('Added to favorites', 'Close', {
+            duration: 2000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom'
+          });
+        },
+        error: (err) => {
+          console.error('Error adding favorite:', err);
+          this.snackBar.open('Failed to add to favorites', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
+        }
+      });
+    }
+  }
+
+  isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
   }
 }

@@ -1,18 +1,9 @@
 <div class="dashboard-shell">
-  <app-sidebar
-    [role]="role"
-    [collapsed]="sidebarCollapsed"
-    (logout)="onLogout()"
-  ></app-sidebar>
+  <app-sidebar [role]="role" [collapsed]="sidebarCollapsed" (logout)="onLogout()"></app-sidebar>
 
   <div class="dashboard-main">
-    <app-header
-      [userName]="currentUser?.fullName || 'John Doe'"
-      [role]="role"
-      (toggleSidebar)="toggleSidebar()"
-      (logout)="onLogout()"
-      (search)="onSearch($event)"
-    ></app-header>
+    <app-header [userName]="currentUser?.username || 'John Doe'" [role]="role" (toggleSidebar)="toggleSidebar()"
+      (logout)="onLogout()" (search)="onSearch($event)"></app-header>
 
     <section class="dashboard-content">
       <router-outlet></router-outlet>

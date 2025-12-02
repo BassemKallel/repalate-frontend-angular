@@ -11,7 +11,7 @@ export interface Transaction {
     createdAt: string;
     message: string;
     user?: {
-        fullName: string;
+        username: string;
         email: string;
     };
     reservation?: {

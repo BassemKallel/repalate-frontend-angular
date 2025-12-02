@@ -1,46 +1,125 @@
 <section class="favorites">
-  <div class="section-header">
-    <div>
-      <h2>Favorites</h2>
-      <p>Keep track of saved announcements and merchants.</p>
+  <div class="page-header">
+    <div class="header-content">
+      <h1>My Favorites</h1>
+      <p>Keep track of your saved announcements and merchants for quick access.</p>
     </div>
   </div>
 
   <ng-container *ngIf="!loading && favorites; else loadingTpl">
     <div class="favorites-grid">
-      <mat-card class="fav-card">
-        <h3>Announcements</h3>
-        <div class="items">
+      <!-- Announcements Section -->
+      <mat-card class="fav-section">
+        <div class="section-title">
+          <mat-icon>favorite</mat-icon>
+          <h2>Favorite Announcements</h2>
+          <span class="count">{{ favorites?.announcements?.length || 0 }}</span>
+        </div>
+
+        <div class="items-list" *ngIf="favorites?.announcements && favorites.announcements.length > 0">
           <div class="announcement-item" *ngFor="let announcement of favorites.announcements">
-            <img [src]="announcement.imageUrl1 || 'https://placehold.co/80x80'" alt="{{ announcement.title }}" />
-            <div class="content">
-              <h4>{{ announcement.title }}</h4>
-              <p>{{ announcement.stock }} {{ announcement.unit }} • {{ announcement.category }}</p>
-              <!-- <small>Pickup: {{ announcement.pickupAddress }}</small> -->
+            <div class="item-image" (click)="viewAnnouncement(announcement.id)">
+              <img [src]="announcement.imageUrl1 || 'https://placehold.co/100x100'" alt="{{ announcement.title }}" />
+              <div class="category-badge">
+                <mat-icon>{{ getCategoryIcon(announcement.category) }}</mat-icon>
+              </div>
             </div>
-            <button mat-icon-button color="warn" (click)="removeAnnouncement(announcement.id)">
-              <mat-icon>close</mat-icon>
-            </button>
+
+            <div class="item-content" (click)="viewAnnouncement(announcement.id)">
+              <h3>{{ announcement.title }}</h3>
+              <div class="item-meta">
+                <span class="meta-item">
+                  <mat-icon>category</mat-icon>
+                  {{ getCategoryLabel(announcement.category) }}
+                </span>
+                <span class="meta-item">
+                  <mat-icon>inventory</mat-icon>
+                  {{ announcement.stock }} {{ announcement.unit }}
+                </span>
+                <span class="meta-item" *ngIf="announcement.price && announcement.announcementType === 'SALE'">
+                  <mat-icon>payments</mat-icon>
+                  {{ announcement.price }} TND
+                </span>
+                <span class="meta-item type-badge" [class.donation]="announcement.announcementType === 'DONATION'">
+                  <mat-icon>{{ announcement.announcementType === 'DONATION' ? 'volunteer_activism' : 'shopping_cart'
+                    }}</mat-icon>
+                  {{ announcement.announcementType === 'DONATION' ? 'Free' : 'For Sale' }}
+                </span>
+              </div>
+              <div class="item-description" *ngIf="announcement.description">
+                {{ announcement.description }}
+              </div>
+            </div>
+
+            <div class="item-actions">
+              <button mat-raised-button color="primary" (click)="viewAnnouncement(announcement.id)">
+                <mat-icon>visibility</mat-icon>
+                View
+              </button>
+              <button mat-icon-button color="warn" (click)="removeAnnouncement(announcement.id)"
+                matTooltip="Remove from favorites">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
           </div>
-          <p class="empty" *ngIf="favorites.announcements?.length === 0">No announcements saved yet.</p>
+        </div>
+
+        <div class="empty-state" *ngIf="!favorites?.announcements || favorites.announcements.length === 0">
+          <mat-icon>inventory_2</mat-icon>
+          <h3>No favorite announcements yet</h3>
+          <p>Browse announcements and click the heart icon to save them here.</p>
+          <button mat-raised-button color="primary" routerLink="/browse">
+            <mat-icon>search</mat-icon>
+            Browse Announcements
+          </button>
         </div>
       </mat-card>
 
-      <mat-card class="fav-card">
-        <h3>Merchants</h3>
-        <div class="items">
+      <!-- Merchants Section -->
+      <mat-card class="fav-section">
+        <div class="section-title">
+          <mat-icon>store</mat-icon>
+          <h2>Favorite Merchants</h2>
+          <span class="count">{{ favorites?.merchants?.length || 0 }}</span>
+        </div>
+
+        <div class="items-list" *ngIf="favorites?.merchants && favorites.merchants.length > 0">
           <div class="merchant-item" *ngFor="let merchant of favorites.merchants">
-            <div class="avatar">{{ merchant.fullName[0] }}</div>
-            <div class="content">
-              <h4>{{ merchant.fullName }}</h4>
-              <p>{{ merchant.location }}</p>
-              <small>{{ merchant.phoneNumber }}</small>
+            <div class="merchant-avatar">
+              <mat-icon>store</mat-icon>
             </div>
-            <button mat-icon-button color="warn" (click)="removeMerchant(merchant.id)">
-              <mat-icon>close</mat-icon>
-            </button>
+
+            <div class="item-content">
+              <h3>{{ merchant.username }}</h3>
+              <div class="item-meta">
+                <span class="meta-item" *ngIf="merchant.location">
+                  <mat-icon>place</mat-icon>
+                  {{ merchant.location }}
+                </span>
+                <span class="meta-item" *ngIf="merchant.phoneNumber">
+                  <mat-icon>phone</mat-icon>
+                  {{ merchant.phoneNumber }}
+                </span>
+                <span class="meta-item" *ngIf="merchant.email">
+                  <mat-icon>email</mat-icon>
+                  {{ merchant.email }}
+                </span>
+              </div>
+            </div>
+
+            <div class="item-actions">
+              <button mat-icon-button color="warn" (click)="removeMerchant(merchant.id)"
+                matTooltip="Remove from favorites">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
           </div>
-          <p class="empty" *ngIf="favorites.merchants?.length === 0">No merchants saved yet.</p>
+        </div>
+
+        <div class="empty-state" *ngIf="!favorites?.merchants || favorites.merchants.length === 0">
+          <mat-icon>store</mat-icon>
+          <h3>No favorite merchants yet</h3>
+          <p>Save merchants you like to keep track of their announcements.</p>
         </div>
       </mat-card>
     </div>
@@ -49,6 +128,7 @@
   <ng-template #loadingTpl>
     <div class="loading-state">
       <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+      <p>Loading your favorites...</p>
     </div>
   </ng-template>
 </section>

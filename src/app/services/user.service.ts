@@ -27,4 +27,8 @@ export class UserService {
   deleteUser(id: number): Observable<string> {
     return this.http.delete(`/api/v1/admin/delete/${id}`, { responseType: 'text' });
   }
+
+  rejectUser(id: number): Observable<string> {
+    return this.http.post(`/api/v1/admin/reject/${id}`, {}, { responseType: 'text' });
+  }
 }

@@ -2,7 +2,7 @@ export type UserRole = 'INDIVIDUAL' | 'MERCHANT' | 'ASSOCIATION' | 'ADMIN';
 
 export interface User {
   id: number;
-  fullName: string;
+  username: string;
   organizationName?: string;
   email: string;
   phoneNumber: string;

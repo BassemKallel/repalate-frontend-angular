@@ -95,6 +95,15 @@
                             getCategoryIcon(announcement.category) }}</mat-icon>
                     </div>
 
+                    <!-- Favorite Button -->
+                    <button *ngIf="isAuthenticated()" mat-icon-button class="favorite-btn"
+                        (click)="toggleAnnouncementFavorite(announcement, $event)"
+                        [attr.aria-label]="announcement.isFavorited ? 'Remove from favorites' : 'Add to favorites'">
+                        <mat-icon [class.favorited]="announcement.isFavorited">
+                            {{ announcement.isFavorited ? 'favorite' : 'favorite_border' }}
+                        </mat-icon>
+                    </button>
+
                     <!-- Expiry Badge -->
                     <div class="expiry-badge" *ngIf="announcement.expiryDate">
                         <mat-icon>schedule</mat-icon>

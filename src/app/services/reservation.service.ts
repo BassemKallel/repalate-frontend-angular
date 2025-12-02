@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export enum TransactionStatus {
-    PENDING = 'PENDING',
+    PENDING_PAYMENT = 'PENDING_PAYMENT',
     PENDING_CONFIRMATION = 'PENDING_CONFIRMATION',
-    COMPLETED = 'COMPLETED',
+    CONFIRMED = 'CONFIRMED',
     CANCELLED = 'CANCELLED'
 }
 
@@ -43,6 +43,13 @@ export class ReservationService {
         return this.http.post<void>(`${this.apiUrl}/${id}/accept`, {});
     }
 
+    confirm(transactionId: number, merchantId: number): Observable<void> {
+        return this.http.post<void>(`${this.apiUrl}/confirm`, {
+            transactionId,
+            merchantId
+        });
+    }
+
     refuse(id: number): Observable<void> {
         return this.http.post<void>(`${this.apiUrl}/${id}/refuse`, {});
     }
@@ -57,5 +64,9 @@ export class ReservationService {
 
     cancel(id: number): Observable<void> {
         return this.http.post<void>(`${this.apiUrl}/${id}/cancel`, {});
+    }
+
+    deliver(id: number): Observable<void> {
+        return this.http.post<void>(`${this.apiUrl}/${id}/deliver`, {});
     }
 }

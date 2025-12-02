@@ -8,7 +8,7 @@ import { User, UserRole } from '../shared/models/user';
 interface JwtPayload {
   sub: string;
   role?: UserRole;
-  fullName?: string;
+  username?: string;
   email?: string;
   exp?: number;
   userId?: number;
@@ -118,7 +118,7 @@ export class AuthService {
 
     const user: User = {
       id: decoded.userId ?? (Number.isNaN(Number(decoded.sub)) ? 0 : Number(decoded.sub)),
-      fullName: decoded.fullName ?? decoded.sub ?? 'User',
+      username: decoded.username ?? decoded.sub ?? 'User',
       email: decoded.email ?? decoded.sub ?? '',
       phoneNumber: '',
       location: '',

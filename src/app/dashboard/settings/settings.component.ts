@@ -44,7 +44,7 @@ export class SettingsComponent implements OnInit {
       next: (user) => {
         this.currentUser = user;
         this.profileForm.patchValue({
-          username: user.fullName,
+          username: user.username,
           phoneNumber: user.phoneNumber,
           location: user.location
         });

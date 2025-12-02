@@ -42,7 +42,7 @@ export class UsersListComponent implements OnInit {
         console.log('Users loaded:', users);
         const normalized: User[] = users.map((user) => ({
           ...user,
-          fullName: user.fullName || (user as any).username || 'Unknown user',
+          username: user.username || 'Unknown user',
           joinDate: user.joinDate || (user as any).createdAt || new Date().toISOString(),
           status: user.status || ((user as any).validated === false ? 'Inactive' : 'Active'),
           email: user.email || (user as any).username || 'No email'
@@ -68,7 +68,7 @@ export class UsersListComponent implements OnInit {
   validate(user: User): void {
     this.userService.validateUser(user.id).subscribe({
       next: () => {
-        this.snackBar.open(`${user.fullName} validated`, 'Close', { duration: 2000 });
+        this.snackBar.open(`${user.username} validated`, 'Close', { duration: 2000 });
         this.loadUsers();
       }
     });
@@ -77,7 +77,7 @@ export class UsersListComponent implements OnInit {
   delete(user: User): void {
     this.confirm({
       title: 'Supprimer l’utilisateur',
-      message: `Confirmer la suppression de ${user.fullName}?`,
+      message: `Confirmer la suppression de ${user.username}?`,
       confirmLabel: 'Supprimer',
       danger: true
     }).then((confirmed) => {
@@ -151,7 +151,7 @@ export class UsersListComponent implements OnInit {
         status: 'all',
         ...parsed
       };
-      const name = data.fullName?.toLowerCase() ?? '';
+      const name = data.username?.toLowerCase() ?? '';
       const email = data.email?.toLowerCase() ?? '';
       const location = data.location?.toLowerCase() ?? '';
       const role = data.role?.toLowerCase() ?? '';

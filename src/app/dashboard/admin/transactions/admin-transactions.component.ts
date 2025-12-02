@@ -58,7 +58,7 @@ export class AdminTransactionsComponent implements AfterViewInit, OnInit {
 
           return {
             ref: payment.providerPaymentId || `PAY-${payment.paymentId}`,
-            applicant: user ? user.fullName : `User ${reservation?.userId || 'Unknown'}`,
+            applicant: user ? user.username : `User ${reservation?.userId || 'Unknown'}`,
             association: reservation?.announcementTitle || 'N/A',
             status: this.mapStatus(payment.status)
           };

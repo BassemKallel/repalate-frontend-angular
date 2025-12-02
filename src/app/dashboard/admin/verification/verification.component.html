@@ -66,9 +66,9 @@
           <th mat-header-cell *matHeaderCellDef>Applicant</th>
           <td mat-cell *matCellDef="let user">
             <div class="user-cell">
-              <div class="avatar">{{ (user.fullName || user.username || user.email || 'U').charAt(0) }}</div>
+              <div class="avatar">{{ (user.username || user.email || 'U').charAt(0) }}</div>
               <div>
-                <strong>{{ user.fullName || user.username || user.email || 'Unknown' }}</strong>
+                <strong>{{ user.username || user.email || 'Unknown' }}</strong>
                 <div class="meta">
                   <span class="muted">{{ user.email || user.username || 'N/A' }}</span>
                 </div>
@@ -93,6 +93,13 @@
               <span>{{ user.phoneNumber || user.phone || 'N/A' }}</span>
               <small class="muted">{{ user.location || user.city || 'N/A' }}</small>
             </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="joinDate">
+          <th mat-header-cell *matHeaderCellDef>Join Date</th>
+          <td mat-cell *matCellDef="let user">
+            {{ user.joinDate | date:'shortDate' }}
           </td>
         </ng-container>
 
@@ -122,8 +129,9 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="['fullName', 'role', 'phone', 'document', 'actions']"></tr>
-        <tr mat-row *matRowDef="let row; columns: ['fullName', 'role', 'phone', 'document', 'actions'];"></tr>
+        <tr mat-header-row *matHeaderRowDef="['fullName', 'role', 'phone', 'joinDate', 'document', 'actions']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['fullName', 'role', 'phone', 'joinDate', 'document', 'actions'];">
+        </tr>
       </table>
     </div>
   </mat-card>

@@ -78,6 +78,14 @@
               <div class="merchant-name">Merchant #{{ announcement.merchantId }}</div>
               <div class="merchant-meta">Merchant</div>
             </div>
+            <!-- Merchant Favorite Button -->
+            <button *ngIf="isPublicView && canFavorite()" mat-icon-button class="merchant-favorite-btn"
+              (click)="toggleMerchantFavorite($event)"
+              [attr.aria-label]="isMerchantFavorited ? 'Remove merchant from favorites' : 'Add merchant to favorites'">
+              <mat-icon [class.favorited]="isMerchantFavorited">
+                {{ isMerchantFavorited ? 'favorite' : 'favorite_border' }}
+              </mat-icon>
+            </button>
           </div>
 
           <!-- Description -->
@@ -131,10 +139,20 @@
                 <input matInput type="number" [(ngModel)]="reservationQuantity" [min]="1" [max]="announcement.stock">
                 <span matSuffix>{{ announcement.unit }}</span>
               </mat-form-field>
-              <button mat-raised-button color="primary" (click)="reserve()">
-                <mat-icon>shopping_basket</mat-icon>
-                Réserver
-              </button>
+              <div class="action-buttons">
+                <!-- Announcement Favorite Button -->
+                <button *ngIf="canFavorite()" mat-icon-button class="announcement-favorite-btn"
+                  (click)="toggleAnnouncementFavorite($event)"
+                  [attr.aria-label]="isAnnouncementFavorited ? 'Remove from favorites' : 'Add to favorites'">
+                  <mat-icon [class.favorited]="isAnnouncementFavorited">
+                    {{ isAnnouncementFavorited ? 'favorite' : 'favorite_border' }}
+                  </mat-icon>
+                </button>
+                <button mat-raised-button color="primary" (click)="reserve()">
+                  <mat-icon>shopping_basket</mat-icon>
+                  Réserver
+                </button>
+              </div>
             </div>
           </div>
 

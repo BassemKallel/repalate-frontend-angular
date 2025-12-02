@@ -16,5 +16,7 @@ export interface Announcement {
   expiryDate: string;
   createdAt: string;
   updatedAt: string;
+  isFavorited?: boolean; // UI-only property
 }
+
 
