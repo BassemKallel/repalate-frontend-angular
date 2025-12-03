@@ -1,0 +1,99 @@
+<section class="favorite-announcements">
+    <div class="page-header">
+        <div class="header-content">
+            <h1>Favorite Announcements</h1>
+            <p>Your saved food announcements for quick access.</p>
+        </div>
+        <div class="header-actions">
+            <button mat-raised-button color="primary" routerLink="/browse">
+                <mat-icon>search</mat-icon>
+                Browse Announcements
+            </button>
+            <button mat-stroked-button routerLink="/dashboard/favorites/merchants">
+                <mat-icon>store</mat-icon>
+                View Favorite Merchants
+            </button>
+        </div>
+    </div>
+
+    <ng-container *ngIf="!loading; else loadingTpl">
+        <div class="announcements-section" *ngIf="announcements.length > 0">
+            <div class="section-header">
+                <div class="section-title">
+                    <mat-icon>favorite</mat-icon>
+                    <h2>My Favorite Announcements</h2>
+                    <span class="count">{{ announcements.length }}</span>
+                </div>
+            </div>
+
+            <div class="items-list">
+                <div class="announcement-item" *ngFor="let announcement of announcements">
+                    <div class="item-image" (click)="viewAnnouncement(announcement.id)">
+                        <img [src]="announcement.imageUrl1 || 'https://placehold.co/100x100'"
+                            alt="{{ announcement.title }}" />
+                        <div class="category-badge">
+                            <mat-icon>{{ getCategoryIcon(announcement.category) }}</mat-icon>
+                        </div>
+                    </div>
+
+                    <div class="item-content" (click)="viewAnnouncement(announcement.id)">
+                        <h3>{{ announcement.title }}</h3>
+                        <div class="item-meta">
+                            <span class="meta-item">
+                                <mat-icon>category</mat-icon>
+                                {{ getCategoryLabel(announcement.category) }}
+                            </span>
+                            <span class="meta-item">
+                                <mat-icon>inventory</mat-icon>
+                                {{ announcement.stock }} {{ announcement.unit }}
+                            </span>
+                            <span class="meta-item"
+                                *ngIf="announcement.price && announcement.announcementType === 'SALE'">
+                                <mat-icon>payments</mat-icon>
+                                {{ announcement.price }} TND
+                            </span>
+                            <span class="meta-item type-badge"
+                                [class.donation]="announcement.announcementType === 'DONATION'">
+                                <mat-icon>{{ announcement.announcementType === 'DONATION' ? 'volunteer_activism' :
+                                    'shopping_cart'
+                                    }}</mat-icon>
+                                {{ announcement.announcementType === 'DONATION' ? 'Free' : 'For Sale' }}
+                            </span>
+                        </div>
+                        <div class="item-description" *ngIf="announcement.description">
+                            {{ announcement.description }}
+                        </div>
+                    </div>
+
+                    <div class="item-actions">
+                        <button mat-raised-button color="primary" (click)="viewAnnouncement(announcement.id)">
+                            <mat-icon>visibility</mat-icon>
+                            View
+                        </button>
+                        <button mat-icon-button color="warn" (click)="removeAnnouncement(announcement.id)"
+                            matTooltip="Remove from favorites">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="empty-state" *ngIf="announcements.length === 0">
+            <mat-icon>inventory_2</mat-icon>
+            <h3>No favorite announcements yet</h3>
+            <p>Browse announcements and click the heart icon to save them here.</p>
+            <button mat-raised-button color="primary" routerLink="/browse">
+                <mat-icon>search</mat-icon>
+                Browse Announcements
+            </button>
+        </div>
+    </ng-container>
+
+    <ng-template #loadingTpl>
+        <div class="loading-state">
+            <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+            <p>Loading your favorite announcements...</p>
+        </div>
+    </ng-template>
+</section>

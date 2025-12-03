@@ -5,8 +5,10 @@ import { UserRole } from '../../models/user';
 interface NavItem {
   label: string;
   icon: string;
-  route: string;
+  route?: string;
   roles?: UserRole[];
+  children?: NavItem[];
+  expanded?: boolean;
 }
 
 @Component({
@@ -24,12 +26,21 @@ export class SidebarComponent {
     { label: 'Announcements', icon: 'campaign', route: '/dashboard/announcements', roles: ['MERCHANT'] },
     { label: 'Reservations', icon: 'event_available', route: '/dashboard/reservations', roles: ['MERCHANT', 'INDIVIDUAL', 'ASSOCIATION'] },
     { label: 'Transactions', icon: 'sync_alt', route: '/dashboard/transactions', roles: ['MERCHANT', 'INDIVIDUAL', 'ASSOCIATION'] },
-    { label: 'Favorites', icon: 'favorite', route: '/dashboard/favorites', roles: ['INDIVIDUAL', 'ASSOCIATION'] },
+    {
+      label: 'Favorites',
+      icon: 'favorite',
+      roles: ['INDIVIDUAL', 'ASSOCIATION'],
+      expanded: false,
+      children: [
+        { label: 'Announcements', icon: 'campaign', route: '/dashboard/favorites/announcements' },
+        { label: 'Merchants', icon: 'store', route: '/dashboard/favorites/merchants' }
+      ]
+    },
     { label: 'Stats', icon: 'insights', route: '/dashboard/admin/stats', roles: ['ADMIN'] },
     { label: 'Announcements', icon: 'campaign', route: '/dashboard/admin/announcements', roles: ['ADMIN'] },
     { label: 'Transactions', icon: 'sync_alt', route: '/dashboard/admin/transactions', roles: ['ADMIN'] },
     { label: 'Verification', icon: 'verified', route: '/dashboard/admin/verification', roles: ['ADMIN'] },
-    { label: 'Signals', icon: 'flag', route: '/dashboard/admin/signals', roles: ['ADMIN'] },
+
     { label: 'Users', icon: 'group', route: '/dashboard/admin/users', roles: ['ADMIN'] }
   ];
 
@@ -40,6 +51,12 @@ export class SidebarComponent {
       return true;
     }
     return !!this.role && item.roles.includes(this.role);
+  }
+
+  toggleExpand(item: NavItem): void {
+    if (item.children) {
+      item.expanded = !item.expanded;
+    }
   }
 
   navigate(route: string): void {

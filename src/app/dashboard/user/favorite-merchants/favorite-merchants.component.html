@@ -1,0 +1,80 @@
+<section class="favorite-merchants">
+    <div class="page-header">
+        <div class="header-content">
+            <h1>Favorite Merchants</h1>
+            <p>Your saved merchants and food providers.</p>
+        </div>
+        <div class="header-actions">
+            <button mat-raised-button color="primary" routerLink="/browse">
+                <mat-icon>search</mat-icon>
+                Browse Announcements
+            </button>
+            <button mat-stroked-button routerLink="/dashboard/favorites/announcements">
+                <mat-icon>favorite</mat-icon>
+                View Favorite Announcements
+            </button>
+        </div>
+    </div>
+
+    <ng-container *ngIf="!loading; else loadingTpl">
+        <div class="merchants-section" *ngIf="merchants.length > 0">
+            <div class="section-header">
+                <div class="section-title">
+                    <mat-icon>store</mat-icon>
+                    <h2>My Favorite Merchants</h2>
+                    <span class="count">{{ merchants.length }}</span>
+                </div>
+            </div>
+
+            <div class="items-list">
+                <div class="merchant-item" *ngFor="let merchant of merchants">
+                    <div class="merchant-avatar">
+                        <mat-icon>store</mat-icon>
+                    </div>
+
+                    <div class="item-content">
+                        <h3>{{ merchant.username }}</h3>
+                        <div class="item-meta">
+                            <span class="meta-item" *ngIf="merchant.location">
+                                <mat-icon>place</mat-icon>
+                                {{ merchant.location }}
+                            </span>
+                            <span class="meta-item" *ngIf="merchant.phoneNumber">
+                                <mat-icon>phone</mat-icon>
+                                {{ merchant.phoneNumber }}
+                            </span>
+                            <span class="meta-item" *ngIf="merchant.email">
+                                <mat-icon>email</mat-icon>
+                                {{ merchant.email }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="item-actions">
+                        <button mat-icon-button color="warn" (click)="removeMerchant(merchant.id)"
+                            matTooltip="Remove from favorites">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="empty-state" *ngIf="merchants.length === 0">
+            <mat-icon>store</mat-icon>
+            <h3>No favorite merchants yet</h3>
+            <p>Save merchants you like to keep track of their announcements.</p>
+            <button mat-raised-button color="primary" routerLink="/browse">
+                <mat-icon>search</mat-icon>
+                Browse Announcements
+            </button>
+        </div>
+    </ng-container>
+
+    <ng-template #loadingTpl>
+        <div class="loading-state">
+            <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+            <p>Loading your favorite merchants...</p>
+        </div>
+    </ng-template>
+</section>

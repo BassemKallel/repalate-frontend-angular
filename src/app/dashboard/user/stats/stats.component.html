@@ -1,165 +1,245 @@
-<section class="stats">
+<section class="stats-dashboard">
     <div class="section-header">
         <div>
-            <h2>Statistics Dashboard</h2>
-            <p>Overview of your platform performance and key metrics</p>
+            <h2>Tableau de Bord</h2>
+            <p *ngIf="!isMerchant">Vue d'ensemble de votre activité sur Replate</p>
+            <p *ngIf="isMerchant">Gérez et suivez vos annonces et réservations</p>
         </div>
-        <mat-button-toggle-group value="week">
-            <mat-button-toggle value="week">Week</mat-button-toggle>
-            <mat-button-toggle value="month">Month</mat-button-toggle>
-            <mat-button-toggle value="year">Year</mat-button-toggle>
-        </mat-button-toggle-group>
     </div>
 
-    <!-- Key Metrics -->
-    <div class="metrics-grid">
-        <mat-card class="metric-card">
-            <div class="metric-icon announcements">
-                <mat-icon>campaign</mat-icon>
-            </div>
-            <div class="metric-content">
-                <h3>156</h3>
-                <p>Total Announcements</p>
-                <span class="trend positive">+12% from last month</span>
-            </div>
-        </mat-card>
-
-        <mat-card class="metric-card">
-            <div class="metric-icon reservations">
-                <mat-icon>event_available</mat-icon>
-            </div>
-            <div class="metric-content">
-                <h3>193</h3>
-                <p>Total Reservations</p>
-                <span class="trend positive">+8% from last month</span>
-            </div>
-        </mat-card>
-
-        <mat-card class="metric-card">
-            <div class="metric-icon food-saved">
-                <mat-icon>eco</mat-icon>
-            </div>
-            <div class="metric-content">
-                <h3>2,450 kg</h3>
-                <p>Food Saved</p>
-                <span class="trend positive">+15% from last month</span>
-            </div>
-        </mat-card>
-
-        <mat-card class="metric-card">
-            <div class="metric-icon revenue">
-                <mat-icon>payments</mat-icon>
-            </div>
-            <div class="metric-content">
-                <h3>3,240 TND</h3>
-                <p>Total Revenue</p>
-                <span class="trend negative">-3% from last month</span>
-            </div>
-        </mat-card>
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="loading">
+        <mat-progress-spinner mode="indeterminate" diameter="50"></mat-progress-spinner>
+        <p>Chargement des statistiques...</p>
     </div>
 
-    <!-- Charts Section -->
-    <div class="charts-grid">
-        <mat-card class="chart-card">
-            <h3>Announcements by Category</h3>
-            <div class="chart-placeholder">
-                <div class="category-stats">
-                    <div class="category-item">
-                        <div class="category-bar bakery" style="width: 85%"></div>
-                        <span>Bakery - 85%</span>
-                    </div>
-                    <div class="category-item">
-                        <div class="category-bar fruits" style="width: 70%"></div>
-                        <span>Fruits & Vegetables - 70%</span>
-                    </div>
-                    <div class="category-item">
-                        <div class="category-bar dairy" style="width: 60%"></div>
-                        <span>Dairy - 60%</span>
-                    </div>
-                    <div class="category-item">
-                        <div class="category-bar meals" style="width: 45%"></div>
-                        <span>Prepared Meals - 45%</span>
-                    </div>
-                    <div class="category-item">
-                        <div class="category-bar other" style="width: 30%"></div>
-                        <span>Other - 30%</span>
-                    </div>
-                </div>
-            </div>
-        </mat-card>
-
-        <mat-card class="chart-card">
-            <h3>Reservation Status</h3>
-            <div class="chart-placeholder">
-                <div class="status-grid">
-                    <div class="status-item">
-                        <div class="status-circle pending">45</div>
-                        <span>Pending</span>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-circle confirmed">78</div>
-                        <span>Confirmed</span>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-circle completed">128</div>
-                        <span>Completed</span>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-circle cancelled">12</div>
-                        <span>Cancelled</span>
-                    </div>
-                </div>
-            </div>
-        </mat-card>
-    </div>
-
-    <!-- Recent Activity -->
-    <mat-card class="activity-card">
-        <h3>Recent Activity</h3>
-        <div class="activity-list">
-            <div class="activity-item">
-                <div class="activity-icon new">
-                    <mat-icon>add_circle</mat-icon>
-                </div>
-                <div class="activity-content">
-                    <strong>New announcement created</strong>
-                    <p>Fresh Baguettes - 10 kg available</p>
-                    <small>2 hours ago</small>
-                </div>
-            </div>
-
-            <div class="activity-item">
-                <div class="activity-icon reservation">
+    <!-- Individual/Association Stats -->
+    <div *ngIf="!loading && !isMerchant">
+        <div class="stats-cards">
+            <mat-card class="stat-card">
+                <div class="stat-icon total">
                     <mat-icon>event_available</mat-icon>
                 </div>
-                <div class="activity-content">
-                    <strong>Reservation confirmed</strong>
-                    <p>Ahmed Ben Salem reserved 5 kg of Organic Vegetables</p>
-                    <small>4 hours ago</small>
+                <div class="stat-content">
+                    <h3>{{ userStats.totalReservations }}</h3>
+                    <p>Total Réservations</p>
                 </div>
-            </div>
+            </mat-card>
 
-            <div class="activity-item">
-                <div class="activity-icon completed">
+            <mat-card class="stat-card">
+                <div class="stat-icon active">
+                    <mat-icon>schedule</mat-icon>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ userStats.activeReservations }}</h3>
+                    <p>Réservations Actives</p>
+                </div>
+            </mat-card>
+
+            <mat-card class="stat-card">
+                <div class="stat-icon completed">
                     <mat-icon>check_circle</mat-icon>
                 </div>
-                <div class="activity-content">
-                    <strong>Pickup completed</strong>
-                    <p>Nour Association picked up 8 pieces of Prepared Meals</p>
-                    <small>6 hours ago</small>
+                <div class="stat-content">
+                    <h3>{{ userStats.completedReservations }}</h3>
+                    <p>Complétées</p>
                 </div>
-            </div>
+            </mat-card>
 
-            <div class="activity-item">
-                <div class="activity-icon cancelled">
-                    <mat-icon>cancel</mat-icon>
+            <mat-card class="stat-card">
+                <div class="stat-icon savings">
+                    <mat-icon>savings</mat-icon>
                 </div>
-                <div class="activity-content">
-                    <strong>Reservation cancelled</strong>
-                    <p>Mohamed Ali cancelled reservation for Dairy Products</p>
-                    <small>1 day ago</small>
+                <div class="stat-content">
+                    <h3>{{ userStats.totalSavings | number:'1.2-2' }}€</h3>
+                    <p>Économies Totales</p>
                 </div>
+            </mat-card>
+
+            <mat-card class="stat-card">
+                <div class="stat-icon favorites">
+                    <mat-icon>favorite</mat-icon>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ userStats.totalFavorites }}</h3>
+                    <p>Favoris</p>
+                </div>
+            </mat-card>
+        </div>
+
+        <div class="charts-grid">
+            <mat-card class="chart-card">
+                <mat-card-header>
+                    <mat-card-title>Évolution des Réservations</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="chart-container">
+                        <canvas baseChart [data]="evolutionChartData" [options]="evolutionChartOptions"
+                            [type]="'line'"></canvas>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="chart-card">
+                <mat-card-header>
+                    <mat-card-title>Répartition par Statut</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="chart-container">
+                        <canvas baseChart [data]="distributionChartData" [options]="distributionChartOptions"
+                            [type]="'doughnut'"></canvas>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="chart-card full-width">
+                <mat-card-header>
+                    <mat-card-title>Top 5 Catégories</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="chart-container">
+                        <canvas baseChart [data]="categoriesChartData" [options]="categoriesChartOptions"
+                            [type]="'bar'"></canvas>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div class="quick-actions">
+            <h3>Actions Rapides</h3>
+            <div class="actions-grid">
+                <button mat-raised-button color="primary" routerLink="/browse">
+                    <mat-icon>search</mat-icon>
+                    Parcourir les Annonces
+                </button>
+                <button mat-raised-button routerLink="/dashboard/reservations">
+                    <mat-icon>event_available</mat-icon>
+                    Mes Réservations
+                </button>
+                <button mat-raised-button routerLink="/dashboard/favorites/announcements">
+                    <mat-icon>favorite</mat-icon>
+                    Mes Favoris
+                </button>
+                <button mat-raised-button routerLink="/dashboard/transactions">
+                    <mat-icon>sync_alt</mat-icon>
+                    Mes Transactions
+                </button>
             </div>
         </div>
-    </mat-card>
+    </div>
+
+    <!-- Merchant Stats -->
+    <div *ngIf="!loading && isMerchant">
+        <div class="stats-cards">
+            <mat-card class="stat-card">
+                <div class="stat-icon total">
+                    <mat-icon>campaign</mat-icon>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ merchantStats.totalAnnouncements }}</h3>
+                    <p>Total Annonces</p>
+                </div>
+            </mat-card>
+
+            <mat-card class="stat-card">
+                <div class="stat-icon active">
+                    <mat-icon>check_circle</mat-icon>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ merchantStats.activeAnnouncements }}</h3>
+                    <p>Annonces Actives</p>
+                </div>
+            </mat-card>
+
+            <mat-card class="stat-card">
+                <div class="stat-icon pending">
+                    <mat-icon>schedule</mat-icon>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ merchantStats.pendingAnnouncements }}</h3>
+                    <p>En Attente</p>
+                </div>
+            </mat-card>
+
+            <mat-card class="stat-card">
+                <div class="stat-icon reservations">
+                    <mat-icon>event_available</mat-icon>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ merchantStats.totalReservations }}</h3>
+                    <p>Réservations Reçues</p>
+                </div>
+            </mat-card>
+
+            <mat-card class="stat-card">
+                <div class="stat-icon revenue">
+                    <mat-icon>attach_money</mat-icon>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ merchantStats.totalRevenue | number:'1.2-2' }}€</h3>
+                    <p>Revenu Total</p>
+                </div>
+            </mat-card>
+        </div>
+
+        <div class="charts-grid">
+            <mat-card class="chart-card">
+                <mat-card-header>
+                    <mat-card-title>Annonces Créées</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="chart-container">
+                        <canvas baseChart [data]="evolutionChartData" [options]="evolutionChartOptions"
+                            [type]="'line'"></canvas>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="chart-card">
+                <mat-card-header>
+                    <mat-card-title>Répartition par Type</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="chart-container">
+                        <canvas baseChart [data]="distributionChartData" [options]="distributionChartOptions"
+                            [type]="'doughnut'"></canvas>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="chart-card full-width">
+                <mat-card-header>
+                    <mat-card-title>Top 5 Catégories</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="chart-container">
+                        <canvas baseChart [data]="categoriesChartData" [options]="categoriesChartOptions"
+                            [type]="'bar'"></canvas>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div class="quick-actions">
+            <h3>Actions Rapides</h3>
+            <div class="actions-grid">
+                <button mat-raised-button color="primary" routerLink="/dashboard/announcements/create">
+                    <mat-icon>add</mat-icon>
+                    Nouvelle Annonce
+                </button>
+                <button mat-raised-button routerLink="/dashboard/announcements">
+                    <mat-icon>campaign</mat-icon>
+                    Mes Annonces
+                </button>
+                <button mat-raised-button routerLink="/dashboard/reservations">
+                    <mat-icon>event_available</mat-icon>
+                    Réservations
+                </button>
+                <button mat-raised-button routerLink="/dashboard/transactions">
+                    <mat-icon>sync_alt</mat-icon>
+                    Transactions
+                </button>
+            </div>
+        </div>
+    </div>
 </section>

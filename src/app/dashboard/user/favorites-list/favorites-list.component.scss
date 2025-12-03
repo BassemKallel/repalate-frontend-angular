@@ -296,10 +296,11 @@
   text-align: center;
   padding: 3rem 2rem;
 
-  mat-icon {
-    font-size: 80px;
-    width: 80px;
-    height: 80px;
+  // Target ONLY the direct child icon (the big box)
+  >mat-icon {
+    font-size: 20px !important;
+    width: 20px !important;
+    height: 20px !important;
     color: #e0e0e0;
     margin-bottom: 1rem;
   }
@@ -321,11 +322,13 @@
     border-radius: 8px;
     font-weight: 600;
 
+    // Target the icon inside the button specifically
     mat-icon {
       margin-right: 0.5rem;
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
+      font-size: 20px !important;
+      width: 20px !important;
+      height: 20px !important;
+      line-height: 20px;
     }
   }
 }
@@ -336,7 +339,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 400px;
+  min-height: 200px;
   gap: 1rem;
 
   p {

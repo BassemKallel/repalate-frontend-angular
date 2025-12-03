@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { User } from '../../../shared/models/user';
 import { UserService } from '../../../services/user.service';
 import { ConfirmDialogComponent, ConfirmDialogData } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { UserDetailsDialogComponent } from './user-details-dialog/user-details-dialog.component';
 
 @Component({
   selector: 'app-users-list',
@@ -90,6 +91,14 @@ export class UsersListComponent implements OnInit {
           this.loadUsers();
         }
       });
+    });
+  }
+
+  viewDetails(user: User): void {
+    this.dialog.open(UserDetailsDialogComponent, {
+      width: '600px',
+      maxWidth: '95vw',
+      data: user
     });
   }
 

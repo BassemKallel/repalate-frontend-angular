@@ -1,17 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { AnnouncementService } from '../../../services/announcement.service';
-import { Announcement } from '../../../shared/models/announcement';
-
-interface TransactionRow {
-  transactionId: string;
-  announcementId: number;
-  type: string;
-  stock: string;
-  date: string;
-  status: 'Pending' | 'Transacted' | 'Cancelled';
-}
+import { PaymentService, Transaction } from '../../../services/payment.service';
 
 @Component({
   selector: 'app-transactions-list',
@@ -19,13 +9,13 @@ interface TransactionRow {
   styleUrl: './transactions-list.component.scss'
 })
 export class TransactionsListComponent implements OnInit {
-  displayedColumns = ['transactionId', 'announcementId', 'type', 'stock', 'date', 'status', 'actions'];
-  dataSource = new MatTableDataSource<TransactionRow>([]);
+  displayedColumns = ['paymentId', 'amount', 'status', 'date', 'actions'];
+  dataSource = new MatTableDataSource<Transaction>([]);
   loading = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private announcementService: AnnouncementService) { }
+  constructor(private paymentService: PaymentService) { }
 
   ngOnInit(): void {
     this.loadTransactions();
@@ -33,10 +23,9 @@ export class TransactionsListComponent implements OnInit {
 
   loadTransactions(): void {
     this.loading = true;
-    this.announcementService.getMyOffers().subscribe({
-      next: (announcements) => {
-        const rows = this.mapToTransactions(announcements);
-        this.dataSource = new MatTableDataSource(rows);
+    this.paymentService.getMyPayments().subscribe({
+      next: (transactions) => {
+        this.dataSource = new MatTableDataSource(transactions);
         setTimeout(() => {
           if (this.paginator) {
             this.dataSource.paginator = this.paginator;
@@ -50,25 +39,19 @@ export class TransactionsListComponent implements OnInit {
     });
   }
 
-  private mapToTransactions(announcements: Announcement[]): TransactionRow[] {
-    return announcements.map((announcement, index) => ({
-      transactionId: `TN-${(index + 1).toString().padStart(3, '0')}`,
-      announcementId: announcement.id,
-      type: announcement.announcementType === 'DONATION' ? 'Free' : 'Paid',
-      stock: `${announcement.stock} ${announcement.unit}`,
-      date: announcement.createdAt ?? new Date().toISOString(),
-      status: 'Transacted' // Placeholder as status mapping might be different
-    }));
-  }
-
   getStatusClass(status: string): string {
-    switch (status) {
-      case 'Transacted':
-        return 'status success';
-      case 'Cancelled':
-        return 'status danger';
+    const s = status?.toUpperCase();
+    switch (s) {
+      case 'COMPLETED':
+      case 'SUCCESS':
+        return 'status-success';
+      case 'FAILED':
+      case 'CANCELLED':
+        return 'status-danger';
+      case 'PENDING':
+        return 'status-warning';
       default:
-        return 'status warning';
+        return 'status-default';
     }
   }
 
@@ -76,15 +59,15 @@ export class TransactionsListComponent implements OnInit {
     return this.dataSource.data.length;
   }
 
-  getTransactedCount(): number {
-    return this.dataSource.data.filter(t => t.status === 'Transacted').length;
+  getCompletedCount(): number {
+    return this.dataSource.data.filter(t => t.status === 'COMPLETED' || t.status === 'SUCCESS').length;
   }
 
   getPendingCount(): number {
-    return this.dataSource.data.filter(t => t.status === 'Pending').length;
+    return this.dataSource.data.filter(t => t.status === 'PENDING').length;
   }
 
   getCancelledCount(): number {
-    return this.dataSource.data.filter(t => t.status === 'Cancelled').length;
+    return this.dataSource.data.filter(t => t.status === 'CANCELLED' || t.status === 'FAILED').length;
   }
 }

@@ -10,6 +10,8 @@ interface AdminTransaction {
   ref: string;
   applicant: string;
   association: string;
+  amount: number;
+  date: string;
   status: 'En cours' | 'Terminée' | 'Annulée';
 }
 
@@ -21,7 +23,7 @@ interface AdminTransaction {
 export class AdminTransactionsComponent implements AfterViewInit, OnInit {
   transactions: AdminTransaction[] = [];
 
-  displayedColumns: string[] = ['ref', 'applicant', 'association', 'status', 'actions'];
+  displayedColumns: string[] = ['ref', 'applicant', 'association', 'amount', 'date', 'status', 'actions'];
   dataSource = new MatTableDataSource<AdminTransaction>([]);
   filterText = '';
   statusFilter: 'all' | AdminTransaction['status'] = 'all';
@@ -60,6 +62,8 @@ export class AdminTransactionsComponent implements AfterViewInit, OnInit {
             ref: payment.providerPaymentId || `PAY-${payment.paymentId}`,
             applicant: user ? user.username : `User ${reservation?.userId || 'Unknown'}`,
             association: reservation?.announcementTitle || 'N/A',
+            amount: payment.amount,
+            date: payment.createdAt,
             status: this.mapStatus(payment.status)
           };
         });

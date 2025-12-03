@@ -254,3 +254,33 @@ mat-paginator {
     }
   }
 }
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  
+  mat-icon {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+
+  p {
+    margin: 0 0 1.5rem 0;
+    color: #666;
+    font-size: 1rem;
+  }
+
+  button {
+    margin-top: 0.5rem;
+  }
+}
+

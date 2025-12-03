@@ -31,4 +31,8 @@ export class PaymentService {
     getAllPayments(): Observable<Transaction[]> {
         return this.http.get<Transaction[]>(`${this.apiUrl}/admin/all`);
     }
+
+    getMyPayments(): Observable<Transaction[]> {
+        return this.http.get<Transaction[]>(`${this.apiUrl}/my-payments`);
+    }
 }

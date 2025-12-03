@@ -11,11 +11,32 @@
 
   <nav>
     <ng-container *ngFor="let item of navItems">
-      <a *ngIf="canDisplay(item)" [routerLink]="item.route" routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
-        <mat-icon>{{ item.icon }}</mat-icon>
-        <span>{{ item.label }}</span>
-      </a>
+      <ng-container *ngIf="canDisplay(item)">
+        <!-- Item with children (expandable section) -->
+        <div *ngIf="item.children" class="nav-section">
+          <a class="nav-section-header" (click)="toggleExpand(item)">
+            <mat-icon>{{ item.icon }}</mat-icon>
+            <span>{{ item.label }}</span>
+            <mat-icon class="expand-icon" [class.expanded]="item.expanded">
+              {{ item.expanded ? 'expand_less' : 'expand_more' }}
+            </mat-icon>
+          </a>
+          <div class="nav-section-children" [class.expanded]="item.expanded">
+            <a *ngFor="let child of item.children" [routerLink]="child.route" routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }" class="nav-child">
+              <mat-icon>{{ child.icon }}</mat-icon>
+              <span>{{ child.label }}</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Regular item without children -->
+        <a *ngIf="!item.children" [routerLink]="item.route" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">
+          <mat-icon>{{ item.icon }}</mat-icon>
+          <span>{{ item.label }}</span>
+        </a>
+      </ng-container>
     </ng-container>
   </nav>
 

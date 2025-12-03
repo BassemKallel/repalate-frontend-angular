@@ -1,30 +1,175 @@
-<section class="admin-stats-shell">
-  <header>
+<section class="admin-stats-dashboard">
+  <div class="section-header">
     <div>
-      <h2>Statistiques globales</h2>
-      <p>Un aperçu rapide des métriques clés pour les administrateurs.</p>
+      <h2>Tableau de Bord Admin</h2>
+      <p>Vue d'ensemble de la plateforme Replate</p>
     </div>
-    <button mat-stroked-button color="primary">
-      <mat-icon>refresh</mat-icon>
-      Mettre à jour
-    </button>
-  </header>
-
-  <div class="stat-tiles">
-    <article *ngFor="let tile of statTiles" [class.up]="tile.trendUp" [class.down]="tile.trendUp === false">
-      <h3>{{ tile.label }}</h3>
-      <strong>{{ tile.value }}</strong>
-      <span>{{ tile.trend }}</span>
-    </article>
   </div>
 
-  <mat-card class="placeholder-card">
-    <mat-card-header>
-      <mat-card-title>Activité hebdomadaire</mat-card-title>
-      <mat-card-subtitle>Données simulées</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <p>Ce bloc affichera bientôt des graphiques et indicateurs dynamiques.</p>
-    </mat-card-content>
-  </mat-card>
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="loading">
+    <mat-progress-spinner mode="indeterminate" diameter="50"></mat-progress-spinner>
+    <p>Chargement des statistiques...</p>
+  </div>
+
+  <!-- Stats Content -->
+  <div *ngIf="!loading">
+    <!-- Stats Cards Grid -->
+    <div class="stats-cards">
+      <mat-card class="stat-card">
+        <div class="stat-icon users">
+          <mat-icon>group</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h3>{{ stats.totalUsers }}</h3>
+          <p>Total Utilisateurs</p>
+          <small>{{ stats.activeUsers }} actifs ce mois</small>
+        </div>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <div class="stat-icon merchants">
+          <mat-icon>store</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h3>{{ stats.totalMerchants }}</h3>
+          <p>Marchands</p>
+        </div>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <div class="stat-icon announcements">
+          <mat-icon>campaign</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h3>{{ stats.totalAnnouncements }}</h3>
+          <p>Total Annonces</p>
+          <small>{{ stats.activeAnnouncements }} actives</small>
+        </div>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <div class="stat-icon transactions">
+          <mat-icon>sync_alt</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h3>{{ stats.totalTransactions }}</h3>
+          <p>Transactions</p>
+        </div>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <div class="stat-icon revenue">
+          <mat-icon>attach_money</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h3>{{ stats.totalRevenue | number:'1.2-2' }}€</h3>
+          <p>Revenu Total</p>
+        </div>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <div class="stat-icon pending">
+          <mat-icon>schedule</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h3>{{ stats.pendingVerifications }}</h3>
+          <p>Vérifications en Attente</p>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-grid">
+      <!-- Users Evolution -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>Nouveaux Utilisateurs</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-container">
+            <canvas baseChart [data]="usersEvolutionChartData" [options]="usersEvolutionChartOptions"
+              [type]="'line'"></canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Users by Role -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>Utilisateurs par Rôle</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-container">
+            <canvas baseChart [data]="usersRoleChartData" [options]="usersRoleChartOptions" [type]="'bar'"></canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Transactions Evolution -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>Transactions par Mois</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-container">
+            <canvas baseChart [data]="transactionsChartData" [options]="transactionsChartOptions"
+              [type]="'line'"></canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Announcements Status -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>Annonces par Statut</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-container">
+            <canvas baseChart [data]="announcementsStatusChartData" [options]="announcementsStatusChartOptions"
+              [type]="'doughnut'"></canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Categories -->
+      <mat-card class="chart-card full-width">
+        <mat-card-header>
+          <mat-card-title>Top 5 Catégories</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-container">
+            <canvas baseChart [data]="categoriesChartData" [options]="categoriesChartOptions" [type]="'bar'"></canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <h3>Actions Rapides</h3>
+      <div class="actions-grid">
+        <button mat-raised-button color="primary" routerLink="/dashboard/admin/verification">
+          <mat-icon>verified</mat-icon>
+          Vérifications
+        </button>
+        <button mat-raised-button routerLink="/dashboard/admin/users">
+          <mat-icon>group</mat-icon>
+          Utilisateurs
+        </button>
+        <button mat-raised-button routerLink="/dashboard/admin/announcements">
+          <mat-icon>campaign</mat-icon>
+          Annonces
+        </button>
+        <button mat-raised-button routerLink="/dashboard/admin/transactions">
+          <mat-icon>sync_alt</mat-icon>
+          Transactions
+        </button>
+        <button mat-raised-button routerLink="/dashboard/admin/signals">
+          <mat-icon>flag</mat-icon>
+          Signalements
+        </button>
+      </div>
+    </div>
+  </div>
 </section>

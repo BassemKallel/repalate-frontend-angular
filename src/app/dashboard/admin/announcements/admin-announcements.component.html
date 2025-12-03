@@ -149,6 +149,21 @@
       </table>
     </div>
 
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="dataSource.filteredData.length === 0">
+      <mat-icon>campaign</mat-icon>
+      <h3>Aucune annonce trouvée</h3>
+      <p *ngIf="filterText || statusFilter !== 'all'">
+        Essayez de modifier vos filtres de recherche
+      </p>
+      <p *ngIf="!filterText && statusFilter === 'all'">
+        Les annonces apparaîtront ici une fois qu'elles seront créées
+      </p>
+      <button mat-raised-button color="primary" *ngIf="filterText || statusFilter !== 'all'" (click)="clearFilters()">
+        Réinitialiser les filtres
+      </button>
+    </div>
+
     <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
   </mat-card>
 </section>

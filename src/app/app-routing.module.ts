@@ -8,6 +8,8 @@ import { CreateAnnouncementComponent } from './dashboard/user/create-announcemen
 import { AnnouncementDetailsComponent } from './dashboard/user/announcement-details/announcement-details.component';
 import { TransactionsListComponent } from './dashboard/user/transactions-list/transactions-list.component';
 import { FavoritesListComponent } from './dashboard/user/favorites-list/favorites-list.component';
+import { FavoriteAnnouncementsComponent } from './dashboard/user/favorite-announcements/favorite-announcements.component';
+import { FavoriteMerchantsComponent } from './dashboard/user/favorite-merchants/favorite-merchants.component';
 import { UsersListComponent } from './dashboard/admin/users-list/users-list.component';
 import { VerificationComponent } from './dashboard/admin/verification/verification.component';
 import { AdminStatsComponent } from './dashboard/admin/stats/admin-stats.component';
@@ -54,7 +56,18 @@ const routes: Routes = [
       { path: 'transactions', component: TransactionsListComponent },
       {
         path: 'favorites',
-        component: FavoritesListComponent,
+        redirectTo: 'favorites/announcements',
+        pathMatch: 'full'
+      },
+      {
+        path: 'favorites/announcements',
+        component: FavoriteAnnouncementsComponent,
+        canActivate: [RoleGuard],
+        data: { roles: ['INDIVIDUAL', 'ASSOCIATION'] }
+      },
+      {
+        path: 'favorites/merchants',
+        component: FavoriteMerchantsComponent,
         canActivate: [RoleGuard],
         data: { roles: ['INDIVIDUAL', 'ASSOCIATION'] }
       },

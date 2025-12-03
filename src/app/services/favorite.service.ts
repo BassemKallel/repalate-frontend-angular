@@ -27,7 +27,7 @@ export class FavoriteService {
 
         const announcements$ = announcementIds.length > 0
           ? forkJoin(announcementIds.map(id =>
-            this.http.get<Announcement>(`/api/v1/announcements/${id}`).pipe(
+            this.http.get<Announcement>(`/api/v1/offers/${id}`).pipe(
               catchError(() => of(null))
             )
           )).pipe(

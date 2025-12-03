@@ -1,0 +1,68 @@
+<div class="dialog-header">
+    <h2>User Details</h2>
+    <button mat-icon-button (click)="close()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+
+<div class="dialog-content">
+    <div class="user-profile">
+        <div class="avatar-large">
+            <img *ngIf="user.profileImageUrl" [src]="user.profileImageUrl" alt="Profile">
+            <span *ngIf="!user.profileImageUrl">{{ (user.username || '?').charAt(0) }}</span>
+        </div>
+        <div class="user-main-info">
+            <h3>{{ user.username }}</h3>
+            <span class="role-badge" [class]="'role-' + (user.role?.toLowerCase() || 'unknown')">
+                {{ user.role }}
+            </span>
+        </div>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-item">
+            <label>Email</label>
+            <p>{{ user.email }}</p>
+        </div>
+        <div class="info-item">
+            <label>Phone</label>
+            <p>{{ user.phoneNumber || 'N/A' }}</p>
+        </div>
+        <div class="info-item">
+            <label>Location</label>
+            <p>{{ user.location || 'N/A' }}</p>
+        </div>
+        <div class="info-item">
+            <label>Status</label>
+            <p>{{ user.status || 'N/A' }}</p>
+        </div>
+        <div class="info-item" *ngIf="user.organizationName">
+            <label>Organization</label>
+            <p>{{ user.organizationName }}</p>
+        </div>
+        <div class="info-item">
+            <label>Joined</label>
+            <p>{{ user.joinDate | date:'mediumDate' }}</p>
+        </div>
+    </div>
+
+    <div class="document-section" *ngIf="user.documentUrl">
+        <h3>Verification Document</h3>
+        <div class="document-preview">
+            <img *ngIf="isImage(user.documentUrl)" [src]="user.documentUrl" alt="Verification Document">
+            <div class="file-link" *ngIf="!isImage(user.documentUrl)">
+                <mat-icon>description</mat-icon>
+                <a [href]="user.documentUrl" target="_blank">View Document</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="no-document" *ngIf="!user.documentUrl">
+        <mat-icon>folder_off</mat-icon>
+        <p>No verification document uploaded.</p>
+    </div>
+</div>
+
+<div class="dialog-actions">
+    <button mat-stroked-button (click)="close()">Close</button>
+</div>
